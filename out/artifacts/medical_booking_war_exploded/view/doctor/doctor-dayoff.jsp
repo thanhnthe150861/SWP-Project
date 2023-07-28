@@ -1,8 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -22,11 +20,6 @@
 
     <!-- Select2 CSS -->
     <link rel="stylesheet" href="assets/plugins/select2/css/select2.min.css">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="assets/plugins/bootstrap-tagsinput/css/bootstrap-tagsinput.css">
-
-    <link rel="stylesheet" href="assets/plugins/dropzone/dropzone.min.css">
 
     <!-- Main CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
@@ -102,7 +95,7 @@
                                 <p class="text-muted mb-0">${sessionScope.doctor.ranks.name}</p>
                             </div>
                         </div>
-                        <a class="dropdown-item" href="doctor_dashboard">Trang chủ</a>
+                        <a class="dropdown-item" href="doctor_dashboard">Bảng điều khiển</a>
                         <a class="dropdown-item" href="doctor_profile_settings">Thông tin cá nhân</a>
                         <a class="dropdown-item" href="login">Đăng xuất</a>
                     </div>
@@ -122,10 +115,10 @@
                     <nav aria-label="breadcrumb" class="page-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="doctor_dashboard">Trang chủ</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Thông tin cá nhân</li>
+                            <li class="breadcrumb-item active" aria-current="page">Lịch làm việc</li>
                         </ol>
                     </nav>
-                    <h2 class="breadcrumb-title">Thông tin cá nhân</h2>
+                    <h2 class="breadcrumb-title">Lịch làm việc</h2>
                 </div>
             </div>
         </div>
@@ -135,7 +128,8 @@
     <!-- Page Content -->
     <div class="content">
         <div class="container-fluid">
-            <form class="row" action="doctor_profile_settings" method="post" enctype="multipart/form-data">
+
+            <div class="row">
                 <div class="col-md-5 col-lg-4 col-xl-3 theiaStickySidebar">
 
                     <!-- Profile Sidebar -->
@@ -160,7 +154,7 @@
                                     <li>
                                         <a href="doctor_dashboard">
                                             <i class="fas fa-columns"></i>
-                                            <span>Bảng điều khiển </span>
+                                            <span>Bảng điều khiển</span>
                                         </a>
                                     </li>
                                     <li>
@@ -187,13 +181,13 @@
                                             <span>Hóa đơn</span>
                                         </a>
                                     </li>
-                                    <li>
+                                    <li class="active">
                                         <a href="doctor_day_off">
                                             <i class="fas fa-calendar-times"></i>
                                             <span>Xin nghỉ phép</span>
                                         </a>
                                     </li>
-                                    <li class="active">
+                                    <li>
                                         <a href="doctor_profile_settings">
                                             <i class="fas fa-user-cog"></i>
                                             <span>Thông tin cá nhân</span>
@@ -202,13 +196,13 @@
                                     <li>
                                         <a href="doctor_change_password">
                                             <i class="fas fa-lock"></i>
-                                            <span>Thay đôi mật khẩu</span>
+                                            <span>Thay đổi mật khẩu</span>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="login">
                                             <i class="fas fa-sign-out-alt"></i>
-                                            <span>Đăng xuất</span>
+                                            <span>Đăng xuát</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -218,100 +212,128 @@
                     <!-- /Profile Sidebar -->
 
                 </div>
+
                 <div class="col-md-7 col-lg-8 col-xl-9">
-                    <!-- Basic Information -->
-                    <div class="card">
-                        <div class="card-body">
-                            <% String errorMessage = (String) request.getAttribute("messError"); %>
-                            <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
-                            <div class="alert alert-danger" role="alert">
-                                <%= errorMessage %>
-                            </div>
-                            <% } %>
-                            <% String messSuccess = (String) request.getAttribute("messSuccess"); %>
-                            <% if (messSuccess != null && !messSuccess.isEmpty()) { %>
-                            <div class="alert alert-success" role="alert">
-                                <%= messSuccess %>
-                            </div>
-                            <% } %>
-                            <h4 class="card-title">Thông tin cơ bản</h4>
-                            <div class="row form-row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <div class="change-avatar">
-                                            <div class="profile-img">
-                                                <img src="${sessionScope.doctor.url}">
-                                            </div>
-                                            <div class="upload-img">
-                                                <div class="change-photo-btn">
-                                                    <span><i class="fa fa-upload"></i> Tải anh lên</span>
-                                                    <input type="file" class="upload" name="file">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Đơn xin nghỉ phép</h4>
+                                    <% String errorMessage = (String) request.getAttribute("messError"); %>
+                                    <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
+                                    <div class="alert alert-danger" role="alert">
+                                        <%= errorMessage %>
+                                    </div>
+                                    <% } %>
+                                    <% String messSuccess = (String) request.getAttribute("messSuccess"); %>
+                                    <% if (messSuccess != null && !messSuccess.isEmpty()) { %>
+                                    <div class="alert alert-success" role="alert">
+                                        <%= messSuccess %>
+                                    </div>
+                                    <% } %>
+                                    <div class="profile-box">
+                                        <form action="doctor_day_off" method="post">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <input type="date" id="datePicker" class="form-control"
+                                                               name="datePicker" value="${sessionScope.date}">
+                                                    </div>
+                                                    <button class="btn btn-primary form-control">Gửi yêu cầu</button>
                                                 </div>
-                                                <small class="form-text text-muted">Cho phép JPG, GIF or PNG. Kích thước
-                                                    tối đa
-                                                    2MB</small>
+                                                <div class="col-lg-4">
+                                                    <!-- Time Slot -->
+                                                    <div class="time-slot">
+                                                        <ul class="clearfix list-unstyled d-flex justify-content-center">
+                                                            <c:forEach items="${sessionScope.slotList}" var="sl">
+                                                                <li>
+                                                                    <a class="timing btn btn-outline-primary <c:if test='${sessionScope.selectedSlot eq sl.id}'>selected</c:if>"
+                                                                       href="doctor_day_off?datePicker=${sessionScope.date}&selectedSlot=${sl.id}">
+                                                                            ${sl.name}
+                                                                    </a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </ul>
+                                                    </div>
+                                                    <!-- /Time Slot -->
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <input type="text" class="form-control"
+                                                           name="reasonDayOff" placeholder="Nhập lý do xin nghỉ..."
+                                                           required>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="card schedule-widget mb-0">
+
+                                                    <!-- Schedule Header -->
+                                                    <div class="schedule-header">
+
+
+                                                    </div>
+                                                    <!-- /Schedule Header -->
+
+                                                    <!-- Schedule Content -->
+                                                    <div class="tab-content schedule-cont">
+
+                                                        <!-- Monday Slot -->
+                                                        <div id="slot_monday" class="tab-pane fade show active">
+                                                            <h4 class="card-title d-flex justify-content-between">
+                                                                <span>Thời gian bác sĩ <xin></xin> vắng mặt</span>
+                                                            </h4>
+
+                                                            <!-- Slot List -->
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover table-center mb-0">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Ngày</th>
+                                                                        <th>Ca nghỉ</th>
+                                                                        <th>Lý do xin nghỉ</th>
+                                                                        <th>Ghi chú của nhân viên</th>
+                                                                        <th>Trạng thái</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <c:forEach items="${sessionScope.dayOffList}"
+                                                                               var="dol">
+                                                                        <tr>
+                                                                            <td>${dol.date}</td>
+                                                                            <td>${dol.slot.name}</td>
+                                                                            <td>${dol.reason}</td>
+                                                                            <td>${dol.note}</td>
+                                                                            <td><span
+                                                                                    class="badge badge-pill bg-${dol.status == false ?  'warning-light' : dol.status == true ? 'success-light' : ''}">
+                                                                                    ${dol.status == false ? 'Đang chờ' : "Đã được chấp nhận"}
+                                                                            </span></td>
+                                                                        </tr>
+                                                                    </c:forEach>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <!-- /Slot List -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Schedule Content -->
+
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Username <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" value="${sessionScope.account.username}"
-                                               readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Email <span class="text-danger">*</span></label>
-                                        <input type="email" class="form-control" value="${sessionScope.account.email}"
-                                               readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="name"
-                                               value="${sessionScope.doctor.name}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Số điện thoại</label>
-                                        <input type="text" class="form-control" name="phone"
-                                               value="${sessionScope.account.phone}">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>Giới tính</label>
-                                        <select class="form-control select" name="gender">
-                                            <option>Select</option>
-                                            <option value="Male" ${sessionScope.doctor.gender == "Male" ? "selected" : ""}>
-                                                Nam
-                                            </option>
-                                            <option value="Female" ${sessionScope.doctor.gender == "Female" ? "selected" : ""}>
-                                                Nữ
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-0">
-                                        <label>Ngày sinh</label>
-                                        <input type="date" class="form-control" name="dob"
-                                               value="${sessionScope.doctor.dob}">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="submit-section submit-btn-bottom">
-                        <button type="submit" class="btn btn-primary submit-btn">Lưu</button>
-                    </div>
+
                 </div>
-            </form>
+            </div>
+
         </div>
+
     </div>
     <!-- /Page Content -->
 
@@ -321,11 +343,17 @@
         <!-- Footer Top -->
         <div class="footer-top">
             <div class="container-fluid">
-
+                <div class="row">
+                    <div class="col-lg-3 col-md-6">
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- /Footer Top -->
-
+        <!-- /Footer Bottom -->
 
     </footer>
     <!-- /Footer -->
@@ -347,18 +375,8 @@
 <!-- Select2 JS -->
 <script src="assets/plugins/select2/js/select2.min.js"></script>
 
-<!-- Dropzone JS -->
-<script src="assets/plugins/dropzone/dropzone.min.js"></script>
-
-<!-- Bootstrap Tagsinput JS -->
-<script src="assets/plugins/bootstrap-tagsinput/js/bootstrap-tagsinput.js"></script>
-
-<!-- Profile Settings JS -->
-<script src="assets/js/profile-settings.js"></script>
-
 <!-- Custom JS -->
 <script src="assets/js/script.js"></script>
 
 </body>
-
 </html>

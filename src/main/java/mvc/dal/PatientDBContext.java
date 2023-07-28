@@ -14,6 +14,19 @@ public class PatientDBContext extends DBContext {
     private static PreparedStatement stm = null;
     private static ResultSet rs = null;
 
+    public void updateBookingStatus(String id, String status, String textReason) {
+        try {
+            String sql = "UPDATE booking SET status = ?, booking_reason = ? WHERE id = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, status);
+            stm.setString(2, textReason);
+            stm.setInt(3, Integer.parseInt(id));
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<Specialty> getAllSpecialties() {
         List<Specialty> specialtyList = new ArrayList<>();
         try {
@@ -314,11 +327,12 @@ public class PatientDBContext extends DBContext {
 
     public void addNewBooking(Booking booking) {
         try {
-            String sql = "INSERT INTO booking (doctor_id, patient_id, slot_id, booking_reason, date, status) VALUES (?, ?, ?, ?, ?, ?);";
+            String sql = "INSERT INTO booking (patient_id, slot_id, specialty_id, booking_reason, date, status)\n" +
+                    "VALUES (?, ?, ?, ?, ?, ?);\n";
             stm = connection.prepareStatement(sql);
-            stm.setInt(1, booking.getDoctor_id());
-            stm.setInt(2, booking.getPatient_id());
-            stm.setInt(3, booking.getSlot_id());
+            stm.setInt(1, booking.getPatient_id());
+            stm.setInt(2, booking.getSlot_id());
+            stm.setInt(3, booking.getSpecialty_id());
             stm.setString(4, booking.getBooking_reason());
             stm.setDate(5, booking.getDate());
             stm.setString(6, booking.getStatus());

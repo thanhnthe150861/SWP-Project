@@ -25,7 +25,33 @@
     <script src="assets/js/html5shiv.min.js"></script>
     <script src="assets/js/respond.min.js"></script>
     <![endif]-->
+    <style>
+        /* Style for the form inputs */
+        input[type="text"],
+        select {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box;
+        }
 
+        /* Style for the submit button */
+        .submit-section button {
+            font-size: 16px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            color: #fff;
+            background-color: #007bff;
+            cursor: pointer;
+        }
+
+        .submit-section button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 
@@ -203,11 +229,7 @@
                             <nav class="user-tabs mb-4">
                                 <ul class="nav nav-tabs nav-tabs-bottom nav-justified">
                                     <li class="nav-item">
-                                        <a class="nav-link active" href="patient_dashboard">Cuộc hẹn</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="patient_dashboard?medical=true"><span
-                                                class="med-records">Hồ sơ bệnh án</span></a>
+                                        <a class="nav-link active" href="#">Chi tiết về lịch đặt</a>
                                     </li>
                                 </ul>
                             </nav>
@@ -221,69 +243,132 @@
                                     <div class="card card-table mb-0">
                                         <div class="card-body">
                                             <div class="table-responsive">
-                                                <!-- Place this code where you want to display the error message -->
                                                 <% String errorMessage = (String) request.getAttribute("messError"); %>
                                                 <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
                                                 <div class="alert alert-danger" role="alert">
                                                     <%= errorMessage %>
                                                 </div>
-                                                <%}%>
-                                                <table class="table table-hover table-center mb-0">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Bác sĩ khám</th>
-                                                        <th>Ngày đặt</th>
-                                                        <th>Nhóm bệnh</th>
-                                                        <th>Mục đích</th>
-                                                        <th>Trạng thái</th>
-                                                        <th>Hoạt động</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <c:forEach items="${sessionScope.medicalRecordList}" var="m">
+                                                <% } %>
+                                                <% String messSuccess = (String) request.getAttribute("messSuccess"); %>
+                                                <% if (messSuccess != null && !messSuccess.isEmpty()) { %>
+                                                <div class="alert alert-success" role="alert">
+                                                    <%= messSuccess %>
+                                                </div>
+                                                <% } %>
+                                                <form action="appointment_details" method="post">
+                                                    <table class="table table-hover table-center mb-0">
+                                                        <tbody>
                                                         <tr>
                                                             <td>
-                                                                <c:if test="${m.booking.doctor.id != 0}">
+                                                                <span>Mã đặt lịch</span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="bid"
+                                                                       value="${sessionScope.bid}"
+                                                                       readonly>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <span>Bác sĩ khám</span>
+                                                            </td>
+                                                            <td>
+                                                                <c:if test="${sessionScope.bookingID.booking.doctor.id != 0}">
+                                                                    <input type="text" name="did"
+                                                                           value="${sessionScope.bookingID.booking.doctor.id}"
+                                                                           hidden="hidden">
                                                                     <h2 class="table-avatar">
-                                                                        <a href="doctor_profile?id=${m.booking.doctor.id}"
+                                                                        <a href="doctor_profile?id=${sessionScope.bookingID.booking.doctor.id}"
                                                                            class="avatar avatar-sm mr-2">
                                                                             <img class="avatar-img rounded-circle"
-                                                                                 src="${m.booking.doctor.url}">
+                                                                                 src="${sessionScope.bookingID.booking.doctor.url}">
                                                                         </a>
-                                                                        <a href="doctor_profile?id=${m.booking.doctor.id}">${m.booking.doctor.name}
-                                                                            <span>${m.booking.doctor.specialty}</span></a>
+                                                                        <a href="doctor_profile?id=${sessionScope.bookingID.booking.doctor.id}">
+                                                                                ${sessionScope.bookingID.booking.doctor.name}
+                                                                            <span>${sessionScope.bookingID.booking.doctor.specialty}</span>
+                                                                        </a>
                                                                     </h2>
                                                                 </c:if>
                                                             </td>
-                                                            <td>${m.booking.date}<span
-                                                                    class="d-block text-info">${m.booking.slots.name}</span>
-                                                            </td>
-                                                            <td>${m.booking.specialty.name}</td>
-                                                            <td>${m.booking.booking_reason}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ngày đặt</td>
                                                             <td>
-                                                                <span class="badge badge-pill bg-${m.booking.status == 'Confirmed' ? 'success-light' : m.booking.status == 'Pending' ? 'warning-light' : m.booking.status == 'Cancelled' ? 'danger-light' : m.booking.status == 'Completed' ? 'info-light' : ''}">
-                                                                        ${m.booking.status}
-                                                                </span>
+                                                                ${sessionScope.bookingID.booking.date}<span
+                                                                    class="d-block text-info">${sessionScope.bookingID.booking.slots.name}</span>
                                                             </td>
-                                                            <td class="text-right">
-                                                                <div class="table-action">
-                                                                    <c:if test="${m.booking.status == 'Completed'}">
-                                                                        <a href="booking_again?did=${m.booking.doctor.id}"
-                                                                           class="btn btn-sm bg-primary-light">
-                                                                            <i class="far fa-clock"></i> Đặt Lại
-                                                                        </a>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Nhóm bệnh</td>
+                                                            <td>
+                                                                <select name="diseaseGroup" disabled>
+                                                                    <c:forEach items="${sessionScope.listSp}" var="ls">
+                                                                        <option value="${ls.id}" ${sessionScope.bookingID.booking.specialty.id == ls.id ? 'selected' : ''}>
+                                                                            Bệnh về ${ls.name}
+                                                                        </option>
+                                                                    </c:forEach>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <span>Mô tả tình trạng bệnh</span>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="textReason"
+                                                                       value="${sessionScope.bookingID.booking.booking_reason}" ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'readonly' : ''}>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Trạng thái</td>
+                                                            <td>
+                                                                <select name="status">
+                                                                    <option value="Cancelled" ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'disabled' : ''}>
+                                                                        Cancelled
+                                                                    </option>
+                                                                    <option value="Pending" ${sessionScope.bookingID.booking.status == 'Pending' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'disabled' : ''}>
+                                                                        Pending
+                                                                    </option>
+                                                                    <option value="Confirmed" ${sessionScope.bookingID.booking.status == 'Confirmed' ? 'selected' : ''}
+                                                                            disabled>
+                                                                        Confirmed
+                                                                    </option>
+                                                                    <option value="Completed" ${sessionScope.bookingID.booking.status == 'Completed' ? 'selected' : ''}
+                                                                            disabled>
+                                                                        Completed
+                                                                    </option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Ghi chú của nhân viên</td>
+                                                            <td>
+                                                                <input type="text" name="note" readonly
+                                                                       value="${sessionScope.bookingID.booking.reason}">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                <div class="submit-section">
+                                                                    <c:if test="${sessionScope.bookingID.booking.status == 'Cancelled'}">
+                                                                        <a href="patient_dashboard"
+                                                                           class="btn btn-primary submit-btn">Quay
+                                                                            lại</a>
+
                                                                     </c:if>
-                                                                    <a href="appointment_details?bid=${m.booking.id}"
-                                                                       class="btn btn-sm bg-info-light">
-                                                                        <i class="far fa-eye"></i> Xem chi tiết
-                                                                    </a>
+                                                                    <c:if test="${sessionScope.bookingID.booking.status != 'Cancelled'}">
+                                                                        <button type="submit"
+                                                                                class="btn btn-primary submit-btn">
+                                                                            Lưu
+                                                                        </button>
+                                                                    </c:if>
                                                                 </div>
                                                             </td>
                                                         </tr>
-                                                    </c:forEach>
-                                                    </tbody>
-                                                </table>
-
+                                                        </tbody>
+                                                    </table>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>

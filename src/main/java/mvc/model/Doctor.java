@@ -12,6 +12,7 @@ public class Doctor {
     private Date dob;
     private int specialty;
     private int rankId;
+    
     private Account account = new Account();
     private Specialty specialtys = new Specialty();
     private Rank ranks = new Rank();

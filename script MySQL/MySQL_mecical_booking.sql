@@ -38,16 +38,18 @@ ALTER DATABASE medical_booking CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 		gender varchar(10),
 		dob date,
 		specialty int,
-        dayoff_id int,
 		rank_id int NULL,
 		PRIMARY KEY (id)
 	);
     
 CREATE TABLE dayoff (
 		id int auto_increment,
+        doctor_id int,
 		date date,
         slot_id int,
         reason varchar(500),
+        status bit,
+		note varchar(500),
 		PRIMARY KEY (id)
 	);
 
@@ -130,7 +132,7 @@ CREATE TABLE dayoff (
 	ALTER TABLE booking ADD CONSTRAINT fk_booking_doctor FOREIGN KEY (doctor_id) REFERENCES doctor (id);
 	ALTER TABLE booking ADD CONSTRAINT fk_booking_specialty FOREIGN KEY (specialty_id) REFERENCES specialty (id);
     ALTER TABLE doctor ADD CONSTRAINT fk_specialty_doctor FOREIGN KEY (specialty) REFERENCES specialty (id);
-    ALTER TABLE doctor ADD CONSTRAINT fk_dayoff_doctor FOREIGN KEY (dayoff_id) REFERENCES dayoff (id);
+    ALTER TABLE dayoff ADD CONSTRAINT fk_dayoff_doctor FOREIGN KEY (doctor_id) REFERENCES doctor (id);
     ALTER TABLE dayoff ADD CONSTRAINT fk_dayoff_slot FOREIGN KEY (slot_id) REFERENCES slot (id);
 
 
@@ -138,8 +140,8 @@ CREATE TABLE dayoff (
 INSERT INTO role (id, name) VALUES (0, 'Admin'),(1, 'Doctor'),(2, 'Patient'), (3, 'Staff');
 INSERT INTO rank_patient (id, name) VALUES (1, 'Đồng'),(2, 'Bạc'),(3, 'Vàng'),(4, 'Kim Cương');
 INSERT INTO rank_doctor (id, name) VALUES (1, 'Bác Sĩ Hạng 1'),(2, 'Bác Sĩ Hạng 2'),(3, 'Bác Sĩ Hạng 3'),(4, 'Bác Sĩ Hạng 4');
-INSERT INTO slot (id, name) VALUES (1, '9:00 - 9:30'),(2, '10:00 - 10:30'),(3, '11:00 - 11:30'),(4, '14:00 - 14:30'),(5, '15:00 - 15:30'),(6, '16:00 - 16:30');
-INSERT INTO specialty (id, name) VALUES (1, 'Chuyên Khoa Tai'),(2, ' Chuyên Khoa Mũi'),(3, 'Chuyên Khoa Mắt');
+INSERT INTO slot (id, name) VALUES (0, 'Nghỉ cả ngày'),(1, '9:00 - 9:30'),(2, '10:00 - 10:30'),(3, '11:00 - 11:30'),(4, '14:00 - 14:30'),(5, '15:00 - 15:30'),(6, '16:00 - 16:30');
+INSERT INTO specialty (id, name) VALUES (1, 'Tai'),(2, 'Mũi'),(3, 'Mắt');
 
 select * from account;
 
@@ -170,12 +172,6 @@ INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES
 INSERT INTO staff (username, url, name, gender, dob) VALUES ('staff1', 'www.example.com/staff1', 'John Doe', 'Male', '1990-01-01'); 
 INSERT INTO staff (username, url, name, gender, dob) VALUES ('staff2', 'www.example.com/staff2', 'Jane Smith', 'Female', '1985-05-10'); 
 INSERT INTO staff (username, url, name, gender, dob) VALUES ('staff3', 'www.example.com/staff3', 'Michael Johnson', 'Male', '1982-11-15'); 
-
-INSERT INTO booking (doctor_id, patient_id, slot_id, booking_reason, date, status) VALUES (2, 2, 2, 'Viêm họng', '2023-06-23', 'Confirmed');
-INSERT INTO booking (doctor_id, patient_id, slot_id, booking_reason, date, status) VALUES (3, 3, 3, 'Vaccination', '2023-06-22', 'Confirmed');
-INSERT INTO booking (doctor_id, patient_id, slot_id, booking_reason, date, status) VALUES (4, 4, 4, 'Sổ mũi hắt hơi', '2023-06-23', 'Confirmed');
-INSERT INTO booking (doctor_id, patient_id, slot_id, booking_reason, date, status) VALUES (1, 2, 3, 'Annual check-up', '2023-06-23', 'Pending');
-
 
 
 

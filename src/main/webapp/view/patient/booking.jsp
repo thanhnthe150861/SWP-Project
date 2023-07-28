@@ -173,7 +173,7 @@
                                                 <!-- Morning -->
                                                 <li>
                                                     <c:forEach items="${sessionScope.slotList}" var="sl">
-                                                        <c:if test="${sl.id lt 4}">
+                                                        <c:if test="${sl.id lt 4 && sl.id gt 0}">
                                                             <a class="timing <c:if test='${sessionScope.selectedSlot eq sl.id}'>selected</c:if>"
                                                                href="booking?datePicker=${sessionScope.date}&selectedSlot=${sl.id}">
                                                                 <span>${sl.name}</span>
@@ -204,7 +204,7 @@
                                                         style="font-size: 16px; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
                                                     <option value="" disabled selected>Chọn nhóm bệnh</option>
                                                     <c:forEach items="${sessionScope.listSp}" var="ls">
-                                                        <option value="${ls.}">Bệnh về họng</option>
+                                                        <option value="${ls.id}">Bệnh về ${ls.name}</option>
                                                     </c:forEach>
                                                 </select>
 

@@ -182,6 +182,12 @@
                                         </a>
                                     </li>
                                     <li>
+                                        <a href="doctor_day_off">
+                                            <i class="fas fa-calendar-times"></i>
+                                            <span>Xin nghỉ phép</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="doctor_profile_settings">
                                             <i class="fas fa-user-cog"></i>
                                             <span>Thông tin cá nhân</span>
@@ -221,7 +227,7 @@
                                                 <form action="doctor_schedule_timings" method="post">
                                                     <div class="form-group">
                                                         <input type="date" id="datePicker" class="form-control"
-                                                               name="datePicker" value="${date}">
+                                                               name="datePicker" value="${sessionScope.date}">
                                                     </div>
                                                     <button class="form-control">Tìm kiếm</button>
                                                 </form>
@@ -251,7 +257,7 @@
                                                             <!-- Slot List -->
                                                             <div class="doc-times">
                                                                 <c:forEach items="${sessionScope.bookingList}" var="b">
-                                                                    <c:if test="${b.date eq date}">
+                                                                    <c:if test="${b.date eq sessionScope.date}">
                                                                         <div class="doc-slot-list">
                                                                             <a href="patient_profile?id=${b.patient.id}">${b.slots.name}</a>
                                                                         </div>

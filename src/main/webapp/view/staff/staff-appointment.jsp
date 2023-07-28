@@ -181,6 +181,7 @@
                                     <% for (MedicalRecord appointment : appointmentList) { %>
                                     <tr>
                                         <td>
+                                            <% if (appointment.getBooking().getDoctor().getId() != 0) {%>
                                             <h2 class="table-avatar">
                                                 <a href="#" class="avatar avatar-sm mr-2"><img
                                                         class="avatar-img rounded-circle"
@@ -189,6 +190,7 @@
                                                 <a href="#"><%= appointment.getBooking().getDoctor().getName() %>
                                                 </a>
                                             </h2>
+                                            <%}%>
                                         </td>
                                         <td><%= appointment.getBooking().getDoctor().getSpecialty() %>
                                         </td>

@@ -14,6 +14,52 @@ public class DoctorDBContext extends DBContext {
     private static PreparedStatement stm = null;
     private static ResultSet rs = null;
 
+    public List<DayOff> GetAllDayOff(Doctor doctor) {
+        List<DayOff> dayOffList = new ArrayList<>();
+        try {
+            String sql = "SELECT d.*, s.name AS slot_name\n" +
+                    "FROM dayoff d\n" +
+                    "LEFT JOIN slot s ON d.slot_id = s.id\n" +
+                    "WHERE d.doctor_id = ?;";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, doctor.getId());
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                DayOff dayOff = new DayOff();
+                dayOff.setId(rs.getInt("id"));
+                dayOff.setDate(rs.getDate("date"));
+                dayOff.setSlot_id(rs.getInt("slot_id"));
+                dayOff.setReason(rs.getString("reason"));
+                dayOff.setNote(rs.getString("note"));
+                dayOff.setStatus(rs.getBoolean("status"));
+                Slot slot = new Slot();
+                slot.setId(rs.getInt("slot_id"));
+                slot.setName(rs.getString("slot_name"));
+                dayOff.setSlot(slot);
+                dayOffList.add(dayOff);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return dayOffList;
+    }
+
+    public void CreateDayOff(DayOff dayOff) {
+        try {
+            String sql = "INSERT INTO dayoff (date, slot_id, reason, status, doctor_id)\n" +
+                    "VALUES (?, ?, ?, ?, ?);\n";
+            stm = connection.prepareStatement(sql);
+            stm.setDate(1, dayOff.getDate());
+            stm.setInt(2, dayOff.getSlot_id());
+            stm.setString(3, dayOff.getReason());
+            stm.setBoolean(4, dayOff.isStatus());
+            stm.setInt(5, dayOff.getDoctor().getId());
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Doctor getDoctor(Account account) {
         try {
             String sql = "SELECT d.id, d.username, d.url, d.name, d.gender, d.dob, d.specialty, rd.id AS rank_id, rd.name AS 'rank'\n" +
@@ -482,43 +528,50 @@ public class DoctorDBContext extends DBContext {
         return null;
     }
 
+    public static void main(String[] args) {
+        DoctorDBContext p = new DoctorDBContext();
+        System.out.println(p.getTTByBookingID("4").getBooking().getBooking_reason());
+    }
+
     public MedicalRecord getTTByBookingID(String bid) {
         try {
             String sql = "SELECT \n" +
                     "    d.id AS doctor_id,\n" +
                     "    d.name AS doctor_name,\n" +
-                    "    d.url AS doctor_url, \n" +
+                    "    d.url AS doctor_url,\n" +
                     "    d.specialty AS doctor_specialty,\n" +
                     "    rd.name AS rank_doctor,\n" +
                     "    p.id AS patient_id,\n" +
-                    "    p.name AS patient_name, \n" +
-                    "    p.url AS patient_url, \n" +
-                    "    p.dob AS patient_date, \n" +
-                    "    b.id AS booking_id, \n" +
-                    "    b.date AS booking_date, \n" +
-                    "    bill.id AS bill_id, \n" +
-                    "    bill.priceMedical AS medical_price, \n" +
-                    "    bill.pricePrescription AS prescription_price, \n" +
-                    "    bill.totalPrice AS total_price, \n" +
-                    "    bill.payment_status AS payment_status,\n" +
+                    "    p.name AS patient_name,\n" +
+                    "    p.url AS patient_url,\n" +
+                    "    p.dob AS patient_date,\n" +
+                    "    b.id AS booking_id,\n" +
+                    "    b.date AS booking_date,\n" +
+                    "    s.id AS slot_id,\n" +
+                    "    s.name AS slot_name,\n" +
+                    "    b.booking_reason,\n" +
+                    "    b.status,\n" +
+                    "    b.reason AS booking_reason_note,\n" +
                     "    mr.id AS medical_record_id,\n" +
                     "    mr.diagnosis AS medical_record_diagnosis,\n" +
-                    "\tmr.url AS medical_record_url,\n" +
-                    "    mr.prescription AS medical_record_prescription\n" +
-                    "FROM \n" +
-                    "    doctor AS d \n" +
-                    "LEFT JOIN \n" +
-                    "    rank_doctor AS rd ON rd.id = d.rank_id\n" +
-                    "LEFT JOIN \n" +
-                    "    booking AS b ON d.id = b.doctor_id\n" +
-                    "LEFT JOIN \n" +
-                    "    patient AS p ON b.patient_id = p.id\n" +
-                    "LEFT JOIN \n" +
-                    "    medical_record AS mr ON b.id = mr.booking_id\n" +
-                    "LEFT JOIN \n" +
-                    "    bill ON mr.id = bill.medical_record_id\n" +
-                    "WHERE \n" +
-                    "    b.id = ?;";
+                    "    sp.id AS specialty_id,\n" +
+                    "    sp.name AS specialty_name,\n" +
+                    "    mr.url AS medical_record_url,\n" +
+                    "    mr.prescription AS medical_record_prescription,\n" +
+                    "    bill.id AS bill_id,\n" +
+                    "    bill.priceMedical AS medical_price,\n" +
+                    "    bill.pricePrescription AS prescription_price,\n" +
+                    "    bill.totalPrice AS total_price,\n" +
+                    "    bill.payment_status\n" +
+                    "FROM booking AS b\n" +
+                    "LEFT JOIN doctor AS d ON d.id = b.doctor_id\n" +
+                    "LEFT JOIN rank_doctor AS rd ON rd.id = d.rank_id\n" +
+                    "LEFT JOIN specialty AS sp ON sp.id = b.specialty_id\n" +
+                    "LEFT JOIN patient AS p ON b.patient_id = p.id\n" +
+                    "LEFT JOIN medical_record AS mr ON b.id = mr.booking_id\n" +
+                    "LEFT JOIN slot AS s ON b.slot_id = s.id\n" +
+                    "LEFT JOIN bill ON mr.id = bill.medical_record_id\n" +
+                    "WHERE b.id = ?;\n";
             stm = connection.prepareStatement(sql);
             stm.setInt(1, Integer.parseInt(bid));
             rs = stm.executeQuery();
@@ -536,11 +589,23 @@ public class DoctorDBContext extends DBContext {
                 patient.setName(rs.getString("patient_name"));
                 patient.setUrl(rs.getString("patient_url"));
                 patient.setDob(rs.getDate("patient_date"));
+                Slot slot = new Slot();
+                slot.setId(rs.getInt("slot_id"));
+                slot.setName(rs.getString("slot_name"));
                 Booking booking = new Booking();
                 booking.setId(rs.getInt("booking_id"));
                 booking.setDate(rs.getDate("booking_date"));
+                booking.setStatus(rs.getString("status"));
+                booking.setBooking_reason(rs.getString("booking_reason"));
+                booking.setReason(rs.getString("booking_reason_note"));
+                booking.setSpecialty_id(rs.getInt("specialty_id"));
                 booking.setDoctor(doctor);
                 booking.setPatient(patient);
+                booking.setSlots(slot);
+                Specialty specialty = new Specialty();
+                specialty.setId(rs.getInt("specialty_id"));
+                specialty.setName(rs.getString("specialty_name"));
+                booking.setSpecialty(specialty);
                 Bill bill = new Bill();
                 bill.setId(rs.getInt("bill_id"));
                 bill.setPricePrescription(rs.getInt("prescription_price"));
