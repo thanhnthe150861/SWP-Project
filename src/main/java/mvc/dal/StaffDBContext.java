@@ -670,14 +670,17 @@ public class StaffDBContext extends DBContext {
         try {
             String sql = "SELECT \n" +
                     "    b.*,\n" +
-                    "    d.name AS doctor_name,\n" +
-                    "    specialty.name AS doctor_specialty,\n" +
                     "    d.url AS doctor_url,\n" +
-                    "    p.name AS patient_name,\n" +
+                    "    d.name AS doctor_name,\n" +
                     "    p.url AS patient_url,\n" +
-                    "    MAX(m.totalPrice) AS max_total_bill,\n" +
+                    "    p.name AS patient_name,\n" +
+                    "    m.id AS medical_record_id,\n" +
+                    "    m.diagnosis,\n" +
+                    "    m.prescription,\n" +
+                    "    bl.totalPrice AS max_total_bill,\n" +
+                    "    bl.payment_status,\n" +
                     "    s.name AS slot_name,\n" +
-                    "    m.payment_status\n" +
+                    "    sp.name AS specialty_name\n" +
                     "FROM \n" +
                     "    booking b\n" +
                     "LEFT JOIN \n" +
@@ -685,15 +688,13 @@ public class StaffDBContext extends DBContext {
                     "LEFT JOIN \n" +
                     "    patient p ON b.patient_id = p.id\n" +
                     "LEFT JOIN \n" +
-                    "    medical_record mr ON b.id = mr.booking_id\n" +
+                    "    medical_record m ON b.id = m.booking_id\n" +
                     "LEFT JOIN \n" +
-                    "    bill m ON mr.id = m.medical_record_id\n" +
+                    "    bill bl ON m.id = bl.medical_record_id\n" +
                     "LEFT JOIN \n" +
                     "    slot s ON b.slot_id = s.id\n" +
-                    "LEFT JOIN\n" +
-                    "    specialty ON b.specialty_id = specialty.id\n" +
-                    "GROUP BY \n" +
-                    "    b.id, d.name, specialty.name, p.name, s.name, m.payment_status\n" +
+                    "LEFT JOIN \n" +
+                    "    specialty sp ON b.specialty_id = sp.id\n" +
                     "ORDER BY \n" +
                     "    b.date DESC;";
             stm = connection.prepareStatement(sql);
@@ -722,9 +723,10 @@ public class StaffDBContext extends DBContext {
                 booking.setPatient(patient);
                 Specialty specialty = new Specialty();
                 specialty.setId(rs.getInt("specialty_id"));
-                specialty.setName(rs.getString("doctor_specialty"));
+                specialty.setName(rs.getString("specialty_name"));
                 booking.setSpecialty(specialty);
                 MedicalRecord medicalRecord = new MedicalRecord();
+                medicalRecord.setId(rs.getInt("medical_record_id"));
                 medicalRecord.setBooking(booking);
                 medicalRecord.setBill(bill);
                 getAppoinmentList.add(medicalRecord);

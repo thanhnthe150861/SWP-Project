@@ -30,6 +30,16 @@ public class DoctorDayOff extends HttpServlet {
         if (account != null && account.getIsAdmin() == 1) {
             Doctor doctor = doctorDBContext.getDoctor(account);
             session.setAttribute("doctor", doctor);
+            String doid = req.getParameter("doid");
+            String status = req.getParameter("status");
+            if (doid != null && status.equals("Canceled")) {
+                doctorDBContext.CancelDayOff(doid, status);
+                req.setAttribute("messSuccess", "Hủy đơn thành công");
+                List<DayOff> dayOffList = doctorDBContext.GetAllDayOff(doctor);
+                session.setAttribute("dayOffList", dayOffList);
+                req.getRequestDispatcher("view/doctor/doctor-dayoff.jsp").forward(req, resp);
+                return;
+            }
             List<DayOff> dayOffList = doctorDBContext.GetAllDayOff(doctor);
             session.setAttribute("dayOffList", dayOffList);
             //lấy date đã trọn, nếu ko có set mặc định ngày hôm nay

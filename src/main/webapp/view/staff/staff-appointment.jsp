@@ -228,6 +228,12 @@
                                         </td>
                                         <td class="text-right">
                                             <div class="table-action">
+                                                <%if (appointment.getBill().getId() == 0) {%>
+                                                <a href="invoice_details?mid=<%= appointment.getId() %>"
+                                                   class="btn btn-sm bg-success-light">
+                                                    <i class="far fa-edit"></i> Tạo hóa đơn
+                                                </a>
+                                                <%}%>
                                                 <% if (appointment.getBooking().getStatus().equals("Completed")) {%>
                                                 <a href="medical_record_details?mid=<%= appointment.getBooking().getId() %>"
                                                    class="btn btn-sm bg-info-light">Xem hồ sơ

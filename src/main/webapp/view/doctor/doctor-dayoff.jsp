@@ -311,8 +311,15 @@
                                                                                     class="badge badge-pill bg-${dol.status == 'Pending' ?  'warning-light' : dol.status == "Confirmed" ? 'success-light' : dol.status == "Canceled" ? 'danger-light' : ''}">
                                                                                     ${dol.status == 'Canceled' ? 'Hủy' : dol.status == 'Confirmed' ? 'Đã được chấp thuận' : dol.status == 'Pending' ? 'Đang chờ' : ''}
                                                                             </span></td>
-                                                                            <td>
-                                                                                
+                                                                            <td class="text-right">
+                                                                                <div class="table-action">
+                                                                                    <c:if test="${dol.status == 'Pending'}">
+                                                                                        <a href="doctor_day_off?doid=${dol.id}&status=Canceled"
+                                                                                           class="btn btn-sm bg-danger-light">
+                                                                                            Hủy đơn
+                                                                                        </a>
+                                                                                    </c:if>
+                                                                                </div>
                                                                             </td>
                                                                         </tr>
                                                                     </c:forEach>

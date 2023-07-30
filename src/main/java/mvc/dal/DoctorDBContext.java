@@ -14,6 +14,18 @@ public class DoctorDBContext extends DBContext {
     private static PreparedStatement stm = null;
     private static ResultSet rs = null;
 
+    public void CancelDayOff(String doid, String status) {
+        try {
+            String sql = "UPDATE dayoff SET status = ? WHERE id = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, status);
+            stm.setInt(2, Integer.parseInt(doid));
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public List<DayOff> GetAllDayOff(Doctor doctor) {
         List<DayOff> dayOffList = new ArrayList<>();
         try {
