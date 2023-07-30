@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import mvc.dal.DoctorDBContext;
 import mvc.dal.PatientDBContext;
+import mvc.dal.StaffDBContext;
 import mvc.model.*;
 
 import java.io.IOException;
@@ -24,6 +25,9 @@ public class BookingAgain extends HttpServlet {
         HttpSession session = req.getSession();
         Account account = (Account) session.getAttribute("account");
         if (account != null && account.getIsAdmin() == 2) {
+            StaffDBContext sdb = new StaffDBContext();
+            List<Specialty> listSp = patientDBContext.getAllSpecialties();
+            session.setAttribute("listSp", listSp);
             //lấy date đã trọn, nếu ko có set mặc định ngày hôm nay
             LocalDate date = req.getParameter("datePicker") != null ? LocalDate.parse(req.getParameter("datePicker")) : LocalDate.now();
             session.setAttribute("date", date.toString());
@@ -44,6 +48,8 @@ public class BookingAgain extends HttpServlet {
                 session.setAttribute("doctor", doctor);
                 List<Slot> slotExist = dbContext.checkSlotExist(did, date.toString());
                 session.setAttribute("slotExist", slotExist);
+                DayOff dayOff = sdb.getDayOffByDoctorID(did);
+                session.setAttribute("dayOff", dayOff);
             }
             req.getRequestDispatcher("view/patient/booking-again.jsp").forward(req, resp);
         }
@@ -61,9 +67,11 @@ public class BookingAgain extends HttpServlet {
         String selectedDate = (String) session.getAttribute("date");
         String selectedSlot = (String) session.getAttribute("selectedSlot");
         String textReason = req.getParameter("textReason");
+        String diseaseGroup = req.getParameter("diseaseGroup");
 
-        if (selectedDate == null || selectedSlot == null) {
-            resp.sendRedirect("patient_dashboard");
+        if (selectedSlot == null) {
+            req.setAttribute("messError", "Bạn chưa chọn khung giờ đặt lịch");
+            req.getRequestDispatcher("view/patient/booking-again.jsp").forward(req, resp);
             return;
         }
 
@@ -77,10 +85,11 @@ public class BookingAgain extends HttpServlet {
             bookings.setPatient_id(patient.getId());
             bookings.setSlot_id(Integer.parseInt(selectedSlot));
             bookings.setDate(Date.valueOf(selectedDate));
+            bookings.setSpecialty_id(Integer.parseInt(diseaseGroup));
             bookings.setBooking_reason(textReason);
             bookings.setStatus("Pending");
             patientDBContext.addNewBooking(bookings);
-            resp.sendRedirect("patient_dashboard");
+            req.getRequestDispatcher("view/patient/booking-success.jsp").forward(req, resp);
             return;
         }
         req.getRequestDispatcher("view/patient/booking-again.jsp").forward(req, resp);

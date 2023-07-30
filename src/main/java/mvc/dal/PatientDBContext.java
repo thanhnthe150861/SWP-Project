@@ -95,8 +95,9 @@ public class PatientDBContext extends DBContext {
 
     public Doctor getDoctorByPatient(String id) {
         try {
-            String sql = "SELECT doctor.id, doctor.url, doctor.name, doctor.gender, doctor.dob, doctor.specialty, doctor.rank_id, rank_doctor.name AS rank_name\n" +
+            String sql = "SELECT doctor.id, doctor.url, doctor.name, doctor.gender, doctor.dob, doctor.specialty, specialty.name AS specialty_name, doctor.rank_id, rank_doctor.name AS rank_name\n" +
                     "FROM doctor\n" +
+                    "LEFT JOIN specialty ON doctor.specialty = specialty.id\n" +
                     "LEFT JOIN rank_doctor ON doctor.rank_id = rank_doctor.id\n" +
                     "WHERE doctor.id = ?;";
             stm = connection.prepareStatement(sql);
@@ -110,6 +111,9 @@ public class PatientDBContext extends DBContext {
                 doctor.setGender(rs.getString("gender"));
                 doctor.setDob(rs.getDate("dob"));
                 doctor.setSpecialty(rs.getInt("specialty"));
+                Specialty specialty = new Specialty();
+                specialty.setName(rs.getString("specialty_name"));
+                doctor.setSpecialtys(specialty);
                 Rank rank = new Rank();
                 rank.setId(rs.getInt("rank_id"));
                 rank.setName(rs.getString("rank_name"));
