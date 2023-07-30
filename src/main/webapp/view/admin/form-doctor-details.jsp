@@ -268,8 +268,12 @@
                                 <div class="form-group row">
                                     <label class="col-form-label col-md-2">Chuyên khoa</label>
                                     <div class="col-md-10">
-                                        <input class="form-control" type="text" name="speciality" required
-                                               value="${sessionScope.doctor.specialty}">
+                                        <select class="form-control select" name="speciality" required>
+                                            <c:forEach items="${sessionScope.listSp}" var="ls">
+                                                <option value="${ls.id}" ${sessionScope.doctor.specialty == ls.id ? "selected" : ""}>
+                                                    Bác sĩ chuyên khoa ${ls.name}</option>
+                                            </c:forEach>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">

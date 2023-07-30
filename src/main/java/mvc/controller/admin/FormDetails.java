@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import mvc.dal.AccountDB;
+import mvc.dal.PatientDBContext;
 import mvc.model.*;
 import service.AWSS3Client;
 import service.HashMD5;
@@ -41,9 +42,11 @@ public class FormDetails extends HttpServlet {
         if (account != null && account.getIsAdmin() == 0) {
             List<Rank> rankListDoctor = adb.getRankDoctor();
             List<Rank> rankListPatient = adb.getRankPatient();
+            PatientDBContext patientDBContext = new PatientDBContext();
             session.setAttribute("rankListDoctor", rankListDoctor);
             session.setAttribute("rankListPatient", rankListPatient);
-
+            List<Specialty> listSp = patientDBContext.getAllSpecialties();
+            session.setAttribute("listSp", listSp);
             //lấy id để update
             String did = req.getParameter("did");
             String pid = req.getParameter("pid");
