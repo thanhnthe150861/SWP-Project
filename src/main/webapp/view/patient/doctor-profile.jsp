@@ -140,7 +140,7 @@
                             </div>
                             <div class="doc-info-cont">
                                 <h4 class="doc-name">${sessionScope.doctor.name}</h4>
-                                <p class="doc-speciality">${sessionScope.doctor.specialty}</p>
+                                <p class="doc-speciality">Bác sĩ chuyên khoa ${sessionScope.doctor.specialtys.name}</p>
                             </div>
                         </div>
                         <div class="doc-info-right">

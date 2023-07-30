@@ -206,7 +206,7 @@
                                             <a href="doctor_profile?id=${b.id}">${b.name}</a>
                                             <i class="fas fa-check-circle verified"></i>
                                         </h3>
-                                        <p class="speciality">${b.specialty}</p>
+                                        <p class="speciality">Bác sĩ chuyên khoa ${b.specialtys.name}</p>
                                         <ul class="available-info">
                                             <li>
                                                 <i class="fas fa-birthday-cake"></i>${b.dob}

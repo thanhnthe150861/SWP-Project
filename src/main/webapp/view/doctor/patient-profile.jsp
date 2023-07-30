@@ -202,7 +202,7 @@
                                                                              src="${m.booking.doctor.url}">
                                                                     </a>
                                                                     <a href="#">${m.booking.doctor.name}
-                                                                        <span>${m.booking.doctor.specialty}</span></a>
+                                                                        <span>Bác sĩ chuyên khoa ${m.booking.specialty.name}</span></a>
                                                                 </h2>
                                                             </td>
                                                             <td></td>

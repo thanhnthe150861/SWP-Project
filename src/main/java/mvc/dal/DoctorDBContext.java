@@ -62,8 +62,9 @@ public class DoctorDBContext extends DBContext {
 
     public Doctor getDoctor(Account account) {
         try {
-            String sql = "SELECT d.id, d.username, d.url, d.name, d.gender, d.dob, d.specialty, rd.id AS rank_id, rd.name AS 'rank'\n" +
+            String sql = "SELECT d.id, d.username, d.url, d.name, d.gender, d.dob, d.specialty, specialty.name AS specialty_name, rd.id AS rank_id, rd.name AS 'rank'\n" +
                     "FROM doctor d\n" +
+                    "LEFT JOIN specialty ON d.specialty = specialty.id\n" +
                     "LEFT JOIN rank_doctor rd ON rd.id = d.rank_id\n" +
                     "WHERE d.username = ?;";
             stm = connection.prepareStatement(sql);
@@ -79,6 +80,9 @@ public class DoctorDBContext extends DBContext {
                 doctor.setDob(rs.getDate("dob"));
                 doctor.setSpecialty(rs.getInt("specialty"));
                 doctor.setRankId(rs.getInt("rank_id"));
+                Specialty specialty = new Specialty();
+                specialty.setName(rs.getString("specialty_name"));
+                doctor.setSpecialtys(specialty);
                 Rank rank = new Rank();
                 rank.setId(rs.getInt("rank_id"));
                 rank.setName(rs.getString("rank"));

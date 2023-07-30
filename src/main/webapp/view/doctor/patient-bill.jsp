@@ -209,10 +209,11 @@
                                                                                  src="${m.booking.doctor.url}">
                                                                         </a>
                                                                         <a href="#">${m.booking.doctor.name}
-                                                                            <span>${m.booking.doctor.specialty}</span></a>
+                                                                            <span> Bác sĩ chuyên khoa ${m.booking.specialty.name}</span></a>
                                                                     </h2>
                                                                 </td>
-                                                                <td>${m.bill.totalPrice}</td> VND
+                                                                <td>${m.bill.totalPrice}</td>
+                                                                VND
                                                                 <td>${m.booking.date}</td>
                                                                 <td><span
                                                                         class="badge badge-pill bg-${m.bill.payment_status eq 'Paid' ? 'success-light' : m.bill.payment_status eq 'Unpaid' ? 'danger-light' : ''}">

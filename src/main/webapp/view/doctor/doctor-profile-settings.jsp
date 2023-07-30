@@ -149,7 +149,7 @@
                                     <h3> ${sessionScope.doctor.name}</h3>
 
                                     <div class="patient-details">
-                                        <h5 class="mb-0">${sessionScope.doctor.specialty}</h5>
+                                        <h5 class="mb-0">Bác sĩ chuyên khoa ${sessionScope.doctor.specialtys.name}</h5>
                                     </div>
                                 </div>
                             </div>

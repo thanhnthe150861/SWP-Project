@@ -48,7 +48,7 @@ public class BookingAgain extends HttpServlet {
                 session.setAttribute("doctor", doctor);
                 List<Slot> slotExist = dbContext.checkSlotExist(did, date.toString());
                 session.setAttribute("slotExist", slotExist);
-                DayOff dayOff = sdb.getDayOffByDoctorID(did);
+                DayOff dayOff = sdb.getDayOffByDoctorDate(did, date.toString());
                 session.setAttribute("dayOff", dayOff);
             }
             req.getRequestDispatcher("view/patient/booking-again.jsp").forward(req, resp);

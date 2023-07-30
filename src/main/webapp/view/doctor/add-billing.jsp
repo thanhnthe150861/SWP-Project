@@ -247,7 +247,7 @@
                                     <div class="col-sm-6">
                                         <div class="biller-info">
                                             <h4 class="d-block">${sessionScope.bills.booking.doctor.name}</h4>
-                                            <span class="d-block text-sm text-muted">Chuyên khoa ${sessionScope.bills.booking.specialty.name}</span>
+                                            <span class="d-block text-sm text-muted">Bác sĩ chuyên khoa ${sessionScope.bills.booking.specialty.name}</span>
                                             <span class="d-block text-sm text-muted">${sessionScope.bills.booking.doctor.ranks.name}</span>
                                         </div>
                                     </div>

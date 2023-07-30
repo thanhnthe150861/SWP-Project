@@ -231,7 +231,6 @@
                                                                     <c:set var="isSlotExist" value="true"/>
                                                                 </c:if>
                                                             </c:forEach>
-
                                                             <c:choose>
                                                                 <c:when test="${sessionScope.selectedSlot eq sl.id}">
                                                                     <a class="timing selected"
@@ -255,6 +254,7 @@
                                                             </c:choose>
                                                         </c:if>
                                                     </c:forEach>
+
                                                 </li>
                                             </ul>
                                         </div>

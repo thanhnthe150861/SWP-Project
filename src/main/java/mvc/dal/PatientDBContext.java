@@ -375,8 +375,9 @@ public class PatientDBContext extends DBContext {
     public List<Doctor> getMyDoctor(Patient patient, String status) {
         List<Doctor> doctorList = new ArrayList<>();
         try {
-            String sql = "SELECT DISTINCT d.id, d.username, d.url, d.name, d.gender, d.dob, d.specialty , rd.name AS rank_name\n" +
+            String sql = "SELECT DISTINCT d.id, d.username, d.url, d.name, d.gender, d.dob, d.specialty, specialty.name AS specialty_name, rd.name AS rank_name\n" +
                     "FROM doctor d\n" +
+                    "LEFT JOIN specialty ON d.specialty = specialty.id\n" +
                     "LEFT JOIN rank_doctor rd ON d.rank_id = rd.id\n" +
                     "INNER JOIN booking b ON d.id = b.doctor_id\n" +
                     "WHERE b.status = ? AND b.patient_id = ?";
@@ -392,6 +393,9 @@ public class PatientDBContext extends DBContext {
                 doctor.setDob(rs.getDate("dob"));
                 doctor.setSpecialty(rs.getInt("specialty"));
                 doctor.setGender(rs.getString("gender"));
+                Specialty specialty = new Specialty();
+                specialty.setName(rs.getString("specialty_name"));
+                doctor.setSpecialtys(specialty);
                 Rank rank = new Rank();
                 rank.setName(rs.getString("rank_name"));
                 doctor.setRanks(rank);

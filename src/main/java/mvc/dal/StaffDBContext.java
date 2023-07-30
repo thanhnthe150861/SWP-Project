@@ -49,6 +49,72 @@ public class StaffDBContext extends DBContext {
         }
     }
 
+    public DayOff getDayOffByDoctorDate(String did, String date) {
+        try {
+            String sql = "SELECT \n" +
+                    "    d.*,\n" +
+                    "    rd.name AS rank_name,\n" +
+                    "    s.name AS specialty_name,\n" +
+                    "    slot.name AS slot_name,\n" +
+                    "    slot.id AS slot_id,\n" +
+                    "    dayoff.id AS dayoff_id,\n" +
+                    "    dayoff.date AS dayoff_date,\n" +
+                    "    dayoff.slot_id AS dayoff_slot_id,\n" +
+                    "    dayoff.reason AS dayoff_reason,\n" +
+                    "    dayoff.status AS dayoff_status,\n" +
+                    "    dayoff.note AS dayoff_note\n" +
+                    "FROM \n" +
+                    "    doctor d\n" +
+                    "JOIN \n" +
+                    "    rank_doctor rd ON d.rank_id = rd.id\n" +
+                    "JOIN\n" +
+                    "    specialty s ON d.specialty = s.id\n" +
+                    "JOIN\n" +
+                    "    dayoff ON d.id = dayoff.doctor_id\n" +
+                    "JOIN\n" +
+                    "    slot ON dayoff.slot_id = slot.id \n" +
+                    "WHERE \n" +
+                    "    d.id = ? AND dayoff.date = ? AND dayoff.status = 'Confirmed';";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, Integer.parseInt(did));
+            stm.setDate(2, Date.valueOf(date));
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                Doctor s = new Doctor();
+                s.setId(rs.getInt("id"));
+                s.setUrl(rs.getString("url"));
+                s.setName(rs.getString("name"));
+                s.setGender(rs.getString("gender"));
+                s.setDob(rs.getDate("dob"));
+                s.setSpecialty(rs.getInt("specialty"));
+                Rank rank = new Rank();
+                rank.setId(rs.getInt("rank_id"));
+                rank.setName(rs.getString("rank_name"));
+                s.setRanks(rank);
+                Specialty specialty = new Specialty();
+                specialty.setId(rs.getInt("specialty"));
+                specialty.setName(rs.getString("specialty_name"));
+                s.setSpecialtys(specialty);
+                Slot slot = new Slot();
+                slot.setId(rs.getInt("dayoff_slot_id"));
+                slot.setName(rs.getString("slot_name"));
+                DayOff dayOff = new DayOff();
+                dayOff.setId(rs.getInt("dayoff_id"));
+                dayOff.setDate(rs.getDate("dayoff_date"));
+                dayOff.setSlot_id(rs.getInt("dayoff_slot_id"));
+                dayOff.setReason(rs.getString("dayoff_reason"));
+                dayOff.setNote(rs.getString("dayoff_note"));
+                dayOff.setStatus(rs.getString("dayoff_status"));
+                dayOff.setSlot(slot);
+                dayOff.setDoctor(s);
+                return dayOff;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
     public DayOff getDayOffByDoctorID(String did) {
         try {
             String sql = "SELECT \n" +
@@ -95,12 +161,12 @@ public class StaffDBContext extends DBContext {
                 specialty.setName(rs.getString("specialty_name"));
                 s.setSpecialtys(specialty);
                 Slot slot = new Slot();
-                slot.setId(rs.getInt("slot_id"));
+                slot.setId(rs.getInt("dayoff_slot_id"));
                 slot.setName(rs.getString("slot_name"));
                 DayOff dayOff = new DayOff();
                 dayOff.setId(rs.getInt("dayoff_id"));
                 dayOff.setDate(rs.getDate("dayoff_date"));
-                dayOff.setSlot_id(rs.getInt("slot_id"));
+                dayOff.setSlot_id(rs.getInt("dayoff_slot_id"));
                 dayOff.setReason(rs.getString("dayoff_reason"));
                 dayOff.setNote(rs.getString("dayoff_note"));
                 dayOff.setStatus(rs.getString("dayoff_status"));
