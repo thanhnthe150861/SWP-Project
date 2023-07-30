@@ -14,6 +14,7 @@ public class PatientDBContext extends DBContext {
     private static PreparedStatement stm = null;
     private static ResultSet rs = null;
 
+
     public void updateBookingStatus(String id, String status, String textReason) {
         try {
             String sql = "UPDATE booking SET status = ?, booking_reason = ? WHERE id = ?";
@@ -138,6 +139,7 @@ public class PatientDBContext extends DBContext {
                     "    doctor.dob AS doctor_dob,\n" +
                     "    doctor.specialty,\n" +
                     "    doctor.rank_id AS doctor_rank_id,\n" +
+                    "    specialty.name AS specialty_name,\n" +
                     "    patient.url AS patient_url,\n" +
                     "    patient.name AS patient_name,\n" +
                     "    patient.gender AS patient_gender,\n" +
@@ -154,13 +156,13 @@ public class PatientDBContext extends DBContext {
                     "    bill.payment_status\n" +
                     "FROM booking\n" +
                     "LEFT JOIN doctor ON booking.doctor_id = doctor.id\n" +
+                    "LEFT JOIN specialty ON booking.specialty_id = specialty.id\n" +
                     "LEFT JOIN patient ON booking.patient_id = patient.id\n" +
                     "LEFT JOIN slot ON booking.slot_id = slot.id\n" +
                     "LEFT JOIN medical_record ON booking.id = medical_record.booking_id\n" +
                     "LEFT JOIN bill ON medical_record.id = bill.medical_record_id\n" +
                     "WHERE patient.id = ?\n" +
-                    "ORDER BY\n" +
-                    "    booking.date DESC;\n";
+                    "ORDER BY booking.date DESC;";
             stm = connection.prepareStatement(sql);
             stm.setInt(1, patients.getId());
             rs = stm.executeQuery();
@@ -170,6 +172,9 @@ public class PatientDBContext extends DBContext {
                 booking.setBooking_reason(rs.getString("booking_reason"));
                 booking.setDate(rs.getDate("date"));
                 booking.setStatus(rs.getString("status"));
+                Specialty specialty = new Specialty();
+                specialty.setName(rs.getString("specialty_name"));
+                booking.setSpecialty(specialty);
                 Doctor doctors = new Doctor();
                 doctors.setId(rs.getInt("doctor_id"));
                 doctors.setUrl(rs.getString("doctor_url"));
@@ -427,4 +432,3 @@ public class PatientDBContext extends DBContext {
         return getInvoiceList;
     }
 }
-

@@ -231,7 +231,7 @@
                                         <strong class="customer-text">Bác sĩ khám</strong>
                                         <p class="invoice-details invoice-details-two">
                                             ${requestScope.bill.booking.doctor.name} <br>
-                                            ${requestScope.bill.booking.doctor.specialty} <br>
+                                            Chuyên khoa ${requestScope.bill.booking.specialty.name} <br>
                                         </p>
                                     </div>
                                 </div>

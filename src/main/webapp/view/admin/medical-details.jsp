@@ -30,39 +30,6 @@
     <script src="view/admin/assets/js/html5shiv.min.js"></script>
     <script src="view/admin/assets/js/respond.min.js"></script>
     <![endif]-->
-    <style>
-        /* Định dạng các hàng chẵn và lẻ trong bảng */
-        table tr:nth-child(odd) {
-            background-color: #f2f2f2;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #ffffff;
-        }
-
-        /* Tùy chỉnh padding và khoảng cách giữa các cột */
-        table th, table td {
-            padding: 10px;
-        }
-
-        /* Định dạng tiêu đề của bảng */
-        table th {
-            background-color: #007bff;
-            color: #ffffff;
-            text-align: center;
-        }
-
-        /* Định dạng nút Lưu và Quay lại */
-        .submit-btn {
-            margin-right: 10px;
-        }
-
-        /* Định dạng các thông báo lỗi và thành công */
-        .alert {
-            margin-bottom: 10px;
-        }
-    </style>
-
 </head>
 <body>
 
@@ -98,23 +65,23 @@
 
             <!-- User Menu -->
             <li class="nav-item dropdown has-arrow">
-                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown">
                     <span class="user-img"><img class="rounded-circle"
-                                                src="${sessionScope.staff.url}" width="31"
+                                                src="view/admin/assets/img/profiles/avatar-01.jpg" width="31"
                     ></span>
                 </a>
                 <div class="dropdown-menu">
                     <div class="user-header">
                         <div class="avatar avatar-sm">
-                            <img src="${sessionScope.staff.url}"
+                            <img src="view/admin/assets/img/profiles/avatar-01.jpg"
                                  class="avatar-img rounded-circle">
                         </div>
                         <div class="user-text">
-                            <h6>${sessionScope.staff.name}</h6>
+                            <h6>Administrator</h6>
                         </div>
                     </div>
-                    <a class="dropdown-item" href="staff_dashboard">Bảng điều khiển</a>
-                    <a class="dropdown-item" href="login">Đăng xuất</a>
+                    <a class="dropdown-item" href="admin_dashboard">Hồ Sơ</a>
+                    <a class="dropdown-item" href="login">Đăng Xuất</a>
                 </div>
             </li>
             <!-- /User Menu -->
@@ -130,40 +97,47 @@
         <div class="sidebar-inner slimscroll">
             <div id="sidebar-menu" class="sidebar-menu">
                 <ul>
-                    <li>
-                        <a href="staff_dashboard"><i class="fe fe-home"></i> <span>Bảng điều khiển</span></a>
+                    <li class="menu-title">
+                        <span>Main</span>
                     </li>
                     <li>
-                        <a href="create_invoice"><i class="fe fe-edit"></i>
-                            <span>Tạo hóa đơn</span></a>
+                        <a href="admin_dashboard"><i class="fe fe-home"></i> <span>Bảng Điều Khiển</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="appointment_list"><i class="fe fe-layout"></i> <span>Cuộc Hẹn</span></a>
                     </li>
                     <li>
-                        <a href="list_day_off_doctor">
+                        <a href="staff_list"><i class="fe fe-users"></i> <span>Nhân Viên</span></a>
+                    </li>
+                    <li>
+                        <a href="doctor_list"><i class="fe fe-user-plus"></i> <span>Bác Sĩ</span></a>
+                    </li>
+                    <li>
+                        <a href="patient_list"><i class="fe fe-user"></i> <span>Bệnh Nhân</span></a>
+                    </li>
+                    <li>
+                        <a href="day_off_doctor">
                             <i class="fe fe-calendar"></i>
                             <span>Danh sách xin nghỉ</span></a>
                     </li>
-                    <li class="active">
-                        <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
+                    <li>
+                        <a href="invoice_list"><i class="fe fe-document"></i> <span>Hóa Đơn</span></a>
                     </li>
                     <li>
-                        <a href="list_doctor"><i class="fe fe-user"></i> <span>Danh sách bác sĩ</span></a>
+                        <a href="profile"><i class="fe fe-user-plus"></i> <span>Hồ Sơ</span></a>
                     </li>
-                    <li>
-                        <a href="list_patient"><i class="fe fe-user"></i> <span>Danh sách bệnh nhân</span></a>
-                    </li>
-                    <li>
-                        <a href="list_invoice"><i class="fe fe-document"></i> <span>Hóa đơn</span></a>
-                    </li>
-                    <li>
-                        <a href="staff_profile"><i class="fe fe-edit"></i><span>Thông tin cá nhân</span></a>
-                    </li>
-                    <li>
-                        <a href="staff_change_password"><i class="fe fe-edit"></i> <span>Đổi mật khẩu</span></a>
+                    <li class="submenu">
+                        <a href="#"><i class="fe fe-document"></i> <span>Thêm Mới/Cập Nhật</span> <span
+                                class="menu-arrow"></span></a>
+                        <ul style="display: none;" class="active">
+                            <li><a href="form_details?str=doctor">Bác Sĩ</a></li>
+                            <li><a href="form_details?str=patient">Bệnh Nhân</a></li>
+                            <li><a href="form_details?str=staff">Nhân Viên</a></li>
+                        </ul>
                     </li>
                     <li>
                         <a href="login">
-                            <i class="fe fe-eject"></i>
-                            <span>Đăng xuất</span>
+                            <span>Đăng Xuất</span>
                         </a>
                     </li>
                 </ul>
@@ -181,11 +155,10 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Xin chào ${sessionScope.staff.name}</h3>
-                        <span>Nhân viên</span>
+                        <span>Hồ sơ</span>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="staff_dashboard">Bảng điều khiển</a></li>
-                            <li class="breadcrumb-item active">Danh sách lịch đặt chưa xử lý</li>
+                            <li class="breadcrumb-item"><a href="admin_dashboard">Bảng điều khiển</a></li>
+                            <li class="breadcrumb-item active">Hồ sơ chi tiết</li>
                         </ul>
                     </div>
                 </div>
@@ -209,81 +182,78 @@
                                     <%= messSuccess %>
                                 </div>
                                 <% } %>
-                                <form action="appointment_details" method="post">
+                                <form action="medical_record_details" method="post">
                                     <table class="table table-bordered table-striped">
                                         <tbody>
                                         <tr>
-                                            <td style="width: 180px;"><span>Mã đặt lịch</span></td>
+                                            <td style="width: 180px;"><span>Mã hồ sơ</span></td>
                                             <td>
-                                                <input type="text" name="bid" value="${sessionScope.bid}" readonly
+                                                <input type="text" name="mid" value="${sessionScope.medicalRecord.id}"
+                                                       readonly
                                                        class="form-control">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><span>Bác sĩ khám</span></td>
+                                            <td><span>Bác sĩ</span></td>
                                             <td>
-                                                <select name="did">
-                                                    <option value="0">Chưa có bác sĩ khám</option>
-                                                    <c:forEach items="${sessionScope.doctors}" var="d">
-                                                        <option value="${d.id}" ${sessionScope.bookingID.booking.doctor.id == d.id ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                                ${d.name}
-                                                        </option>
-                                                    </c:forEach>
-                                                </select>
+                                                <h2 class="table-avatar">
+                                                    <a href="#" class="avatar avatar-sm mr-2">
+                                                        <img class="avatar-img rounded-circle"
+                                                             src="${sessionScope.medicalRecord.booking.doctor.url}">
+                                                    </a>
+                                                    <a href="#">${sessionScope.medicalRecord.booking.doctor.name}
+                                                    </a>
+                                                </h2>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Ngày đặt</td>
+                                            <td><span>Bệnh nhân</span></td>
                                             <td>
-                                                ${sessionScope.bookingID.booking.date}<br>
-                                                <span class="text-info">${sessionScope.bookingID.booking.slots.name}</span>
+                                                <h2 class="table-avatar">
+                                                    <a href="#" class="avatar avatar-sm mr-2">
+                                                        <img class="avatar-img rounded-circle"
+                                                             src="${sessionScope.medicalRecord.booking.patient.url}">
+                                                    </a>
+                                                    <a href="#">${sessionScope.medicalRecord.booking.patient.name}
+                                                    </a>
+                                                </h2>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Nhóm bệnh</td>
+                                            <td>Ngày khám</td>
                                             <td>
-                                                <select name="diseaseGroup" class="form-control">
-                                                    <c:forEach items="${sessionScope.listSp}" var="ls">
-                                                        <option value="${ls.id}" ${sessionScope.bookingID.booking.specialty.id == ls.id ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                            Bệnh về ${ls.name}
-                                                        </option>
-                                                    </c:forEach>
-                                                </select>
+                                                <input type="date" name="date"
+                                                       value="${sessionScope.medicalRecord.booking.date}"
+                                                       class="form-control">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><span>Mô tả tình trạng bệnh</span></td>
+                                            <td>Ca khám</td>
                                             <td>
-                                                <input type="text" name="textReason"
-                                                       value="${sessionScope.bookingID.booking.booking_reason}"
-                                                       class="form-control" ${sessionScope.bookingID.booking.status == 'Completed' ? 'readonly' : ''}>
+                                                <span class="form-control">${sessionScope.medicalRecord.booking.slots.name}</span>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Trạng thái</td>
+                                            <td>Chuẩn đoán</td>
                                             <td>
-                                                <select name="status" class="form-control">
-                                                    <option value="Canceled" ${sessionScope.bookingID.booking.status == 'Canceled' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                        Canceled
-                                                    </option>
-                                                    <option value="Pending" ${sessionScope.bookingID.booking.status == 'Pending' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                        Pending
-                                                    </option>
-                                                    <option value="Confirmed" ${sessionScope.bookingID.booking.status == 'Confirmed' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                        Confirmed
-                                                    </option>
-                                                    <option value="Completed" ${sessionScope.bookingID.booking.status == 'Completed' ? 'selected' : ''}
-                                                            disabled>
-                                                        Completed
-                                                    </option>
-                                                </select>
+                                                <input type="text" name="diagnosis"
+                                                       value="${sessionScope.medicalRecord.diagnosis}"
+                                                       class="form-control">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Ghi chú của nhân viên</td>
+                                            <td><span>Ảnh đính kèm (nếu có)</span></td>
                                             <td>
-                                                <input type="text" name="note"
-                                                       value="${sessionScope.bookingID.booking.reason}" required
+                                                <input type="file" name="file"
+                                                       class="form-control">
+                                                <span><img src="${sessionScope.medicalRecord.url}"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Đơn thuốc (nếu có)</td>
+                                            <td>
+                                                <input type="text" name="prescription"
+                                                       value="${sessionScope.medicalRecord.prescription}"
                                                        class="form-control">
                                             </td>
                                         </tr>
@@ -294,7 +264,7 @@
                                                     <button type="submit" class="btn btn-primary submit-btn">
                                                         Lưu
                                                     </button>
-                                                    <a href="staff_dashboard" class="btn btn-secondary submit-btn">
+                                                    <a href="appointment_list" class="btn btn-secondary submit-btn">
                                                         Quay lại
                                                     </a>
                                                 </div>

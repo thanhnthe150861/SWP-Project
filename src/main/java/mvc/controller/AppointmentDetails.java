@@ -32,15 +32,15 @@ public class AppointmentDetails extends HttpServlet {
                 session.setAttribute("bid", bid);
                 MedicalRecord bookingID = doctorDBContext.getTTByBookingID(bid);
                 session.setAttribute("bookingID", bookingID);
+                List<Doctor> doctors = staffDBContext.getDoctorBySpecialty(bookingID.getBooking().getSpecialty_id());
+                session.setAttribute("doctors", doctors);
                 if (account.getIsAdmin() == 0) {
-                    req.getRequestDispatcher("view/patient/appointment-details.jsp").forward(req, resp);
+                    req.getRequestDispatcher("view/admin/admin-appointment-details.jsp").forward(req, resp);
                 } else if (account.getIsAdmin() == 1) {
                     req.getRequestDispatcher("view/patient/appointment-details.jsp").forward(req, resp);
                 } else if (account.getIsAdmin() == 2) {
                     req.getRequestDispatcher("view/patient/appointment-details.jsp").forward(req, resp);
                 } else if (account.getIsAdmin() == 3) {
-                    List<Doctor> doctors = staffDBContext.getDoctorBySpecialty(bookingID.getBooking().getSpecialty_id());
-                    session.setAttribute("doctors", doctors);
                     req.getRequestDispatcher("view/staff/staff-appointment-details.jsp").forward(req, resp);
                 }
             }
@@ -55,13 +55,17 @@ public class AppointmentDetails extends HttpServlet {
         PatientDBContext patientDBContext = new PatientDBContext();
         DoctorDBContext doctorDBContext = new DoctorDBContext();
         StaffDBContext stb = new StaffDBContext();
-        DoctorDBContext dbContext = new DoctorDBContext();
         String bid = req.getParameter("bid");
         String did = req.getParameter("did");
+        String status = req.getParameter("status");
+        if (Integer.parseInt(did) == 0 && !status.equalsIgnoreCase("Canceled")) {
+            req.setAttribute("messError", "Bạn chưa chọn bác sĩ khám");
+            req.getRequestDispatcher("view/staff/staff-appointment-details.jsp").forward(req, resp);
+            return;
+        }
         String diseaseGroup = req.getParameter("diseaseGroup");
         String note = req.getParameter("note");
         String textReason = req.getParameter("textReason");
-        String status = req.getParameter("status");
         if (account.getIsAdmin() == 2) {
             patientDBContext.updateBookingStatus(bid, status, textReason);
             MedicalRecord bookingID = doctorDBContext.getTTByBookingID(bid);
@@ -71,10 +75,36 @@ public class AppointmentDetails extends HttpServlet {
             return;
         }
         if (account.getIsAdmin() == 0 || account.getIsAdmin() == 1 || account.getIsAdmin() == 3) {
-            stb.updateBookingStatus(bid, did, diseaseGroup, status, textReason, note);
+            //
+            if (Integer.parseInt(did) != 0) {
+                DayOff dayOff = stb.getDayOffByDoctorID(did);
+                if (dayOff != null) {
+                    MedicalRecord bookingIDs = doctorDBContext.getTTByBookingID(bid);
+                    int comp = bookingIDs.getBooking().getDate().compareTo(dayOff.getDate());
+                    if (comp == 0 && dayOff.getSlot().getId() == bookingIDs.getBooking().getSlots().getId()) {
+                        req.setAttribute("messError", "Bác sĩ bạn chọn vắng mặt vào ca này");
+                        req.getRequestDispatcher("view/staff/staff-appointment-details.jsp").forward(req, resp);
+                        return;
+                    }
+                    if (comp == 0 && dayOff.getSlot().getId() == 0) {
+                        req.setAttribute("messError", "Bác sĩ bạn chọn đã nghỉ vào ngày này");
+                        req.getRequestDispatcher("view/staff/staff-appointment-details.jsp").forward(req, resp);
+                        return;
+                    }
+                }
+            }
+            //
+            if (status.equalsIgnoreCase("Canceled") && Integer.parseInt(did) == 0) {
+                stb.updateBookingStatusCancel(bid, diseaseGroup, status, textReason, note);
+            } else {
+                stb.updateBookingStatus(bid, did, diseaseGroup, status, textReason, note);
+            }
             MedicalRecord bookingID = doctorDBContext.getTTByBookingID(bid);
             session.setAttribute("bookingID", bookingID);
             req.setAttribute("messSuccess", "Cập nhật thành công");
+            if (account.getIsAdmin() == 0) {
+                req.getRequestDispatcher("view/admin/admin-appointment-details.jsp").forward(req, resp);
+            }
             req.getRequestDispatcher("view/staff/staff-appointment-details.jsp").forward(req, resp);
         }
     }

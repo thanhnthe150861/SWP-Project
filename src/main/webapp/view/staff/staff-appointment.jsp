@@ -111,6 +111,11 @@
                         <a href="create_invoice"><i class="fe fe-edit"></i>
                             <span>Tạo hóa đơn</span></a>
                     </li>
+                    <li>
+                        <a href="list_day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
+                    </li>
                     <li class="active">
                         <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
                     </li>
@@ -170,17 +175,20 @@
                                     <thead>
                                     <tr>
                                         <th>Tên bác sĩ</th>
-                                        <th>Chuyên khoa</th>
+                                        <th>Nhóm bệnh</th>
                                         <th>Tên bệnh nhân</th>
                                         <th>Thời gian hẹn</th>
                                         <th class="text-center">Trạng thái</th>
-                                        <th>Chi phí</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <% for (MedicalRecord appointment : appointmentList) { %>
                                     <tr>
                                         <td>
+                                            <% if (appointment.getBooking().getDoctor().getId() == 0) {%>
+                                            Chưa xếp bác sĩ
+                                            <%}%>
                                             <% if (appointment.getBooking().getDoctor().getId() != 0) {%>
                                             <h2 class="table-avatar">
                                                 <a href="#" class="avatar avatar-sm mr-2"><img
@@ -192,7 +200,8 @@
                                             </h2>
                                             <%}%>
                                         </td>
-                                        <td><%= appointment.getBooking().getDoctor().getSpecialty() %>
+                                        <td>Bệnh
+                                            về <%= appointment.getBooking().getSpecialty().getName() %>
                                         </td>
                                         <td>
                                             <h2 class="table-avatar">
@@ -211,14 +220,24 @@
                                             <span class="badge badge-pill bg-success-light"><%= appointment.getBooking().getStatus() %></span>
                                             <% } else if (appointment.getBooking().getStatus().equals("Pending")) { %>
                                             <span class="badge badge-pill bg-warning-light"><%= appointment.getBooking().getStatus() %></span>
-                                            <% } else if (appointment.getBooking().getStatus().equals("Cancelled")) { %>
+                                            <% } else if (appointment.getBooking().getStatus().equals("Canceled")) { %>
                                             <span class="badge badge-pill bg-danger-light"><%= appointment.getBooking().getStatus() %></span>
                                             <% } else if (appointment.getBooking().getStatus().equals("Completed")) { %>
                                             <span class="badge badge-pill bg-info-light"><%= appointment.getBooking().getStatus() %></span>
                                             <% } %>
                                         </td>
-                                        <td class="text-left">
-                                            <%= appointment.getBill().getTotalPrice() %> VND
+                                        <td class="text-right">
+                                            <div class="table-action">
+                                                <% if (appointment.getBooking().getStatus().equals("Completed")) {%>
+                                                <a href="medical_record_details?mid=<%= appointment.getBooking().getId() %>"
+                                                   class="btn btn-sm bg-info-light">Xem hồ sơ
+                                                </a>
+                                                <%}%>
+                                                <a href="appointment_details?bid=<%= appointment.getBooking().getId() %>"
+                                                   class="btn btn-sm bg-info-light">
+                                                    <i class="far fa-eye"></i> Xem chi tiết
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                     <% } %>

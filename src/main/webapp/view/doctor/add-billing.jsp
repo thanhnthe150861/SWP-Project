@@ -247,7 +247,7 @@
                                     <div class="col-sm-6">
                                         <div class="biller-info">
                                             <h4 class="d-block">${sessionScope.bills.booking.doctor.name}</h4>
-                                            <span class="d-block text-sm text-muted">${sessionScope.bills.booking.doctor.specialty}</span>
+                                            <span class="d-block text-sm text-muted">Chuyên khoa ${sessionScope.bills.booking.specialty.name}</span>
                                             <span class="d-block text-sm text-muted">${sessionScope.bills.booking.doctor.ranks.name}</span>
                                         </div>
                                     </div>
@@ -285,25 +285,28 @@
                                                     <td>
                                                         <input type="number" min="0" class="form-control"
                                                                name="priceMedical" id="priceMedical"
-                                                               value="${sessionScope.bills.bill.priceMedical}"> VND
+                                                               value="${sessionScope.bills.bill.priceMedical}">
+                                                        <span>VND</span>
                                                     </td>
                                                     <td>
                                                         <input type="number" min="0" class="form-control"
                                                                name="pricePrescription" id="pricePrescription"
-                                                               value="${sessionScope.bills.bill.pricePrescription}"> VND
+                                                               value="${sessionScope.bills.bill.pricePrescription}">
+                                                        <span>VND</span>
                                                     </td>
                                                     <td>
                                                         <input type="number" min="0" class="form-control"
                                                                name="totalPrice" id="totalPrice"
                                                                value="${sessionScope.bills.bill.priceMedical + sessionScope.bills.bill.pricePrescription}"
-                                                               readonly> VND
+                                                               readonly>
+                                                        <span>VND</span>
                                                     </td>
                                                     <td class="text-center">
-                                                        <select name="status">
+                                                        <select name="status" class="form-control">
                                                             <option ${sessionScope.bills.bill.payment_status == "Paid" ? "selected" : ""}
                                                                     value="Paid">Đã thanh toán
                                                             </option>
-                                                            <option ${sessionScope.bills.bill.payment_status == "Unpaid" ? "selected" : ""}
+                                                            <option ${sessionScope.bills.bill.payment_status == "Unpaid" ? "selected" : ""} ${sessionScope.bills.bill.id == 0 ? "selected" : ""}
                                                                     value="Unpaid">Chưa thanh toán
                                                             </option>
                                                         </select>

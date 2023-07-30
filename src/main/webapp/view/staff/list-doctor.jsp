@@ -105,6 +105,11 @@
                             <span>Tạo hóa đơn</span></a>
                     </li>
                     <li>
+                        <a href="list_day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
+                    </li>
+                    <li>
                         <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
                     </li>
                     <li class="active">
@@ -164,7 +169,7 @@
                                     <thead>
                                     <tr>
                                         <th>Tên bác sĩ</th>
-                                        <th>Chuyên môn</th>
+                                        <th>Chuyên khoa</th>
                                         <th>Ngày sinh</th>
                                         <th class="text-center">Trạng thái</th>
                                         <th class="text-center">Hành động</th>
@@ -183,7 +188,7 @@
                                                 </a>
                                             </h2>
                                         </td>
-                                        <td><%= doctor.getBooking().getDoctor().getSpecialty() %>
+                                        <td>Chuyên khoa về <%= doctor.getBooking().getSpecialty().getName() %>
                                         </td>
                                         <td><%= doctor.getBooking().getDoctor().getDob() %>
                                         </td>

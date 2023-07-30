@@ -307,8 +307,8 @@
                                                                             <td>${dol.reason}</td>
                                                                             <td>${dol.note}</td>
                                                                             <td><span
-                                                                                    class="badge badge-pill bg-${dol.status == false ?  'warning-light' : dol.status == true ? 'success-light' : ''}">
-                                                                                    ${dol.status == false ? 'Đang chờ' : "Đã được chấp nhận"}
+                                                                                    class="badge badge-pill bg-${dol.status == 'Pending' ?  'warning-light' : dol.status == "Confirmed" ? 'success-light' : dol.status == "Canceled" ? 'danger-light' : ''}">
+                                                                                    ${dol.status == 'Canceled' ? 'Hủy' : dol.status == 'Confirmed' ? 'Đã được chấp thuận' : dol.status == 'Pending' ? 'Đang chờ' : ''}
                                                                             </span></td>
                                                                         </tr>
                                                                     </c:forEach>

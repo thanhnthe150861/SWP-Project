@@ -258,22 +258,10 @@
                                                                 </td>
                                                                 <td>${b.booking_reason}</td>
                                                                 <td>
-																		<span class="badge badge-pill bg-${b.status eq 'Confirmed' ? 'success-light' : b.status eq 'Pending' ? 'warning-light' : b.status eq 'Cancelled' ? 'danger-light' : b.status eq 'Completed' ? 'info-light' : ''}">
+																		<span class="badge badge-pill bg-${b.status eq 'Confirmed' ? 'success-light' : b.status eq 'Pending' ? 'warning-light' : b.status eq 'Canceled' ? 'danger-light' : b.status eq 'Completed' ? 'info-light' : ''}">
                                                                                 ${b.status}
                                                                         </span>
                                                                 </td>
-                                                                    <%--                                                                <td class="text-right">--%>
-                                                                    <%--                                                                    <div class="table-action">--%>
-                                                                    <%--                                                                        <a href="doctor_appointments?id=${b.id}&status=Confirmed"--%>
-                                                                    <%--                                                                           class="btn btn-sm bg-success-light">--%>
-                                                                    <%--                                                                            <i class="fas fa-check"></i> Chấp nhận--%>
-                                                                    <%--                                                                        </a>--%>
-                                                                    <%--                                                                        <a href="doctor_appointments?id=${b.id}&status=Cancelled"--%>
-                                                                    <%--                                                                           class="btn btn-sm bg-danger-light">--%>
-                                                                    <%--                                                                            <i class="fas fa-times"></i> Hủy--%>
-                                                                    <%--                                                                        </a>--%>
-                                                                    <%--                                                                    </div>--%>
-                                                                    <%--                                                                </td>--%>
                                                             </tr>
                                                         </c:forEach>
                                                         </tbody>

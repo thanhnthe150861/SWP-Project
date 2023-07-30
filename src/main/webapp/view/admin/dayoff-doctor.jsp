@@ -1,14 +1,11 @@
-<%@ page import="mvc.dal.AdminDBContext" %>
-<%@ page import="mvc.model.MedicalRecord" %>
-<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>TATQ Clinic</title>
+    <title>TATQ CLINIC - LIST DOCTOR</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="view/admin/assets/img/favicon.png">
@@ -17,6 +14,7 @@
     <link rel="stylesheet" href="view/admin/assets/css/bootstrap.min.css">
 
     <!-- Fontawesome CSS -->
+    <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="view/admin/assets/css/font-awesome.min.css">
 
     <!-- Feathericon CSS -->
@@ -41,10 +39,10 @@
 
         <!-- Logo -->
         <div class="header-left">
-            <a href="admin_dashboard" class="logo">
+            <a href="staff_dashboard" class="logo">
                 <span class="text-primary">Clinic</span>-TATQ
             </a>
-            <a href="admin_dashboard" class="logo logo-small">
+            <a href="staff_dashboard" class="logo logo-small">
                 <span class="text-primary" width="50" height="50">Clinic</span>
             </a>
         </div>
@@ -64,9 +62,8 @@
         <ul class="nav user-menu">
 
             <!-- User Menu -->
-
             <li class="nav-item dropdown has-arrow">
-                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown">
                     <span class="user-img"><img class="rounded-circle"
                                                 src="view/admin/assets/img/profiles/avatar-01.jpg" width="31"
                     ></span>
@@ -85,7 +82,6 @@
                     <a class="dropdown-item" href="login">Đăng Xuất</a>
                 </div>
             </li>
-
             <!-- /User Menu -->
 
         </ul>
@@ -111,13 +107,13 @@
                     <li>
                         <a href="staff_list"><i class="fe fe-users"></i> <span>Nhân Viên</span></a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="doctor_list"><i class="fe fe-user-plus"></i> <span>Bác Sĩ</span></a>
                     </li>
                     <li>
                         <a href="patient_list"><i class="fe fe-user"></i> <span>Bệnh Nhân</span></a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="day_off_doctor">
                             <i class="fe fe-calendar"></i>
                             <span>Danh sách xin nghỉ</span></a>
@@ -131,7 +127,7 @@
                     <li class="submenu">
                         <a href="#"><i class="fe fe-document"></i> <span>Thêm Mới/Cập Nhật</span> <span
                                 class="menu-arrow"></span></a>
-                        <ul style="display: none;">
+                        <ul style="display: none;" class="active">
                             <li><a href="form_details?str=doctor">Bác Sĩ</a></li>
                             <li><a href="form_details?str=patient">Bệnh Nhân</a></li>
                             <li><a href="form_details?str=staff">Nhân Viên</a></li>
@@ -139,7 +135,6 @@
                     </li>
                     <li>
                         <a href="login">
-                            <i class="fas fa-sign-out-alt"></i>
                             <span>Đăng Xuất</span>
                         </a>
                     </li>
@@ -152,18 +147,14 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content container-fluid">
-            <%
-                AdminDBContext adminDBContext = new AdminDBContext();
-                List<MedicalRecord> doctorList = adminDBContext.doctorList();
-            %>
             <!-- Page Header -->
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Danh Sách Bác Sĩ</h3>
+                        <h3 class="page-title">Danh sách xin nghỉ</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="admin_dashboard">Bảng Điều Khiển</a></li>
-                            <li class="breadcrumb-item active">Bác Sĩ</li>
+                            <li class="breadcrumb-item"><a href="staff_dashboard">Bảng điều khiển</a></li>
+                            <li class="breadcrumb-item active">Danh sách xin nghỉ</li>
                         </ul>
                     </div>
                 </div>
@@ -175,59 +166,52 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <div class="actions text-md-right">
-                                    <a href="form_details?str=doctor" class="btn btn-sm bg-success-light mr-2">Thêm Mới
-                                        Bác Sĩ</a>
-                                </div>
                                 <table class="datatable table table-hover table-center mb-0">
                                     <thead>
                                     <tr>
-                                        <th>Tên Bác Sĩ</th>
-                                        <th>Chuyên Khoa</th>
-                                        <th>Ngày Sinh</th>
-                                        <th>Doanh Thu</th>
-                                        <th class="text-center">Trạng Thái</th>
-                                        <th class="text-center">Xử Lý</th>
+                                        <th>Tên bác sĩ</th>
+                                        <th>Ngày</th>
+                                        <th>Ca xin nghỉ</th>
+                                        <th>Lý do xin nghỉ</th>
+                                        <th>Ghi chú của nhân viên</th>
+                                        <th class="text-center">Trạng thái</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <% for (MedicalRecord doctor : doctorList) { %>
-                                    <tr>
-                                        <td>
-                                            <h2 class="table-avatar">
-                                                <a href="#" class="avatar avatar-sm mr-2">
-                                                    <img class="avatar-img rounded-circle"
-                                                         src="<%= doctor.getBooking().getDoctor().getUrl() %>"
-                                                    >
-                                                </a>
-                                                <a href="#"><%= doctor.getBooking().getDoctor().getName() %>
-                                                </a>
-                                            </h2>
-                                        </td>
-                                        <td><%= doctor.getBooking().getDoctor().getSpecialty() %>
-                                        </td>
-                                        <td><%= doctor.getBooking().getDoctor().getDob() %>
-                                        </td>
-                                        <td><%= doctor.getBill().getTotalPrice() %> VND
-                                        </td>
-                                        <td class="text-center">
-                                            <% if (doctor.getBooking().getDoctor().getAccount().getStatus()) { %>
-                                            <span class="badge badge-pill bg-success inv-badge">Active</span>
-                                            <% } else { %>
-                                            <span class="badge badge-pill bg-danger inv-badge">Deactive</span>
-                                            <% } %>
-                                        </td>
-                                        <td class="text-center">
-                                            <div class="actions">
-                                                <a data-toggle="modal"
-                                                   href="form_details?did=<%= doctor.getBooking().getDoctor().getId() %>"
-                                                   class="btn btn-sm bg-success-light mr-2">
-                                                    <i class="fe fe-pencil"></i> Sửa
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <% } %>
+                                    <c:forEach items="${sessionScope.dayOffList}" var="dol">
+                                        <tr>
+                                            <td>
+                                                <h2 class="table-avatar">
+                                                    <a href="#" class="avatar avatar-sm mr-2">
+                                                        <img class="avatar-img rounded-circle"
+                                                             src="${dol.doctor.url}">
+                                                    </a>
+                                                    <a href="#">${dol.doctor.name}
+                                                    </a>
+                                                </h2>
+                                            </td>
+                                            <td>${dol.date}
+                                            </td>
+                                            <td>${dol.slot.name}
+                                            </td>
+                                            <td>${dol.reason}
+                                            </td>
+                                            <td>${dol.note}
+                                            </td>
+                                            <td class="text-center">
+                                                <span class="badge badge-pill ${dol.status == "Confirmed" ? 'bg-success inv-badge' : dol.status == 'Pending' ? 'bg-warning inv-badge' : dol.status == "Canceled" ? 'bg-danger inv-badge' : ''}">${dol.status == 'Confirmed' ? 'Đã được chấp nhận' : dol.status == 'Canceled' ? 'Hủy' : dol.status == 'Pending' ? 'Đang chờ' : ''}</span>
+                                            </td>
+                                            <td class="text-right">
+                                                <div class="table-action">
+                                                    <a href="day_off_details?did=${dol.id}"
+                                                       class="btn btn-sm bg-info-light">
+                                                        <i class="far fa-eye"></i> Xem chi tiết
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
@@ -235,7 +219,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
     <!-- /Page Wrapper -->
@@ -260,5 +243,4 @@
 <script src="assets/js/script.js"></script>
 
 </body>
-
 </html>

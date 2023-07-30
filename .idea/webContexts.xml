@@ -12,6 +12,7 @@
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/form-patient-details.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/form-staff-details.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/invoice-report.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/medical-details.jsp" value="file://$PROJECT_DIR$/src/main/webapp/view/admin" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/patient-list.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/profile.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />
         <entry key="file://$PROJECT_DIR$/src/main/webapp/view/admin/staff-list.jsp" value="file://$PROJECT_DIR$/src/main/webapp" />

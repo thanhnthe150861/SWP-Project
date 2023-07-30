@@ -113,7 +113,12 @@
                         <a href="doctor_list"><i class="fe fe-user-plus"></i> <span>Bác Sĩ</span></a>
                     </li>
                     <li>
-                        <a href="patient_list"><i class="fe fe-user"></i> <span>Người Bệnh</span></a>
+                        <a href="patient_list"><i class="fe fe-user"></i> <span>Bệnh nhân</span></a>
+                    </li>
+                    <li>
+                        <a href="day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
                     </li>
                     <li>
                         <a href="invoice_list"><i class="fe fe-document"></i> <span> Hóa Đơn</span></a>

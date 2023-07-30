@@ -21,13 +21,22 @@ public class MedicalRecordDetails extends HttpServlet {
         DoctorDBContext doctorDBContext = new DoctorDBContext();
         if (account != null) {
             String mid = req.getParameter("mid");
-            if (account.getIsAdmin() == 1 || account.getIsAdmin() == 3) {
+            if (account.getIsAdmin() == 1 || account.getIsAdmin() == 3 || account.getIsAdmin() == 0) {
                 if (mid != null) {
                     session.removeAttribute("bid");
                     session.setAttribute("mid", mid);
                     MedicalRecord medicalRecord = doctorDBContext.getTTByMedicalID(mid);
                     session.setAttribute("medicalRecord", medicalRecord);
+                    if (account.getIsAdmin() == 0) {
+                        req.getRequestDispatcher("view/admin/medical-details.jsp").forward(req, resp);
+                        return;
+                    }
+                    if (account.getIsAdmin() == 3) {
+                        req.getRequestDispatcher("view/staff/staff-medical-details.jsp").forward(req, resp);
+                        return;
+                    }
                     req.getRequestDispatcher("view/doctor/add-medical-record.jsp").forward(req, resp);
+                    return;
                 }
                 String bid = req.getParameter("bid");
                 if (bid != null) {
@@ -36,11 +45,13 @@ public class MedicalRecordDetails extends HttpServlet {
                     MedicalRecord medicalRecord = doctorDBContext.getTTByBookingID(bid);
                     session.setAttribute("medicalRecord", medicalRecord);
                     req.getRequestDispatcher("view/doctor/add-medical-record.jsp").forward(req, resp);
+                    return;
                 }
             } else if (account.getIsAdmin() == 2) {
                 MedicalRecord medicalRecord = doctorDBContext.getTTByMedicalID(mid);
                 session.setAttribute("medicalRecord", medicalRecord);
                 req.getRequestDispatcher("view/doctor/add-medical-record.jsp").forward(req, resp);
+                return;
             }
         }
         req.getRequestDispatcher("login");
@@ -49,6 +60,7 @@ public class MedicalRecordDetails extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
+        Account account = (Account) session.getAttribute("account");
         DoctorDBContext doctorDBContext = new DoctorDBContext();
         String diagnosis = req.getParameter("diagnosis");
         String url = req.getParameter("url");
@@ -63,6 +75,14 @@ public class MedicalRecordDetails extends HttpServlet {
 
             session.setAttribute("medicalRecord", medicalRecord);
             req.setAttribute("messSuccess", "Cập nhật thành công");
+            if (account.getIsAdmin() == 0) {
+                req.getRequestDispatcher("view/admin/medical-details.jsp").forward(req, resp);
+                return;
+            }
+            if (account.getIsAdmin() == 3) {
+                req.getRequestDispatcher("view/staff/staff-medical-details.jsp").forward(req, resp);
+                return;
+            }
             req.getRequestDispatcher("view/doctor/add-medical-record.jsp").forward(req, resp);
         }
         String bid = req.getParameter("bid");

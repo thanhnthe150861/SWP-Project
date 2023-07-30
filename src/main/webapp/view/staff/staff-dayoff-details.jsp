@@ -30,39 +30,6 @@
     <script src="view/admin/assets/js/html5shiv.min.js"></script>
     <script src="view/admin/assets/js/respond.min.js"></script>
     <![endif]-->
-    <style>
-        /* Định dạng các hàng chẵn và lẻ trong bảng */
-        table tr:nth-child(odd) {
-            background-color: #f2f2f2;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #ffffff;
-        }
-
-        /* Tùy chỉnh padding và khoảng cách giữa các cột */
-        table th, table td {
-            padding: 10px;
-        }
-
-        /* Định dạng tiêu đề của bảng */
-        table th {
-            background-color: #007bff;
-            color: #ffffff;
-            text-align: center;
-        }
-
-        /* Định dạng nút Lưu và Quay lại */
-        .submit-btn {
-            margin-right: 10px;
-        }
-
-        /* Định dạng các thông báo lỗi và thành công */
-        .alert {
-            margin-bottom: 10px;
-        }
-    </style>
-
 </head>
 <body>
 
@@ -137,12 +104,12 @@
                         <a href="create_invoice"><i class="fe fe-edit"></i>
                             <span>Tạo hóa đơn</span></a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="list_day_off_doctor">
                             <i class="fe fe-calendar"></i>
                             <span>Danh sách xin nghỉ</span></a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
                     </li>
                     <li>
@@ -185,7 +152,7 @@
                         <span>Nhân viên</span>
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="staff_dashboard">Bảng điều khiển</a></li>
-                            <li class="breadcrumb-item active">Danh sách lịch đặt chưa xử lý</li>
+                            <li class="breadcrumb-item active">Danh sách xin nghỉ</li>
                         </ul>
                     </div>
                 </div>
@@ -209,82 +176,78 @@
                                     <%= messSuccess %>
                                 </div>
                                 <% } %>
-                                <form action="appointment_details" method="post">
+                                <form action="day_off_details" method="post">
                                     <table class="table table-bordered table-striped">
                                         <tbody>
                                         <tr>
-                                            <td style="width: 180px;"><span>Mã đặt lịch</span></td>
+                                            <td style="width: 180px;"><span>Mã đơn</span></td>
                                             <td>
-                                                <input type="text" name="bid" value="${sessionScope.bid}" readonly
+                                                <input type="text" name="did" value="${sessionScope.dayOff.id}" readonly
                                                        class="form-control">
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><span>Bác sĩ khám</span></td>
+                                            <td><span>Bác sĩ</span></td>
                                             <td>
-                                                <select name="did">
-                                                    <option value="0">Chưa có bác sĩ khám</option>
-                                                    <c:forEach items="${sessionScope.doctors}" var="d">
-                                                        <option value="${d.id}" ${sessionScope.bookingID.booking.doctor.id == d.id ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                                ${d.name}
+                                                <h2 class="table-avatar">
+                                                    <a href="#" class="avatar avatar-sm mr-2">
+                                                        <img class="avatar-img rounded-circle"
+                                                             src="${sessionScope.dayOff.doctor.url}">
+                                                    </a>
+                                                    <a href="#">${sessionScope.dayOff.doctor.name}
+                                                    </a>
+                                                </h2>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ngày nghỉ</td>
+                                            <td>
+                                                <input type="date" name="date" value="${sessionScope.dayOff.date}"
+                                                       class="form-control">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Ca xin nghỉ</td>
+                                            <td>
+                                                <select name="slotGroup" class="form-control">
+                                                    <c:forEach items="${sessionScope.slotList}" var="sl">
+                                                        <option value="${sl.id}" ${sessionScope.dayOff.slot_id == sl.id ? 'selected' : ''}>
+                                                                ${sl.name}
                                                         </option>
                                                     </c:forEach>
                                                 </select>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Ngày đặt</td>
-                                            <td>
-                                                ${sessionScope.bookingID.booking.date}<br>
-                                                <span class="text-info">${sessionScope.bookingID.booking.slots.name}</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nhóm bệnh</td>
-                                            <td>
-                                                <select name="diseaseGroup" class="form-control">
-                                                    <c:forEach items="${sessionScope.listSp}" var="ls">
-                                                        <option value="${ls.id}" ${sessionScope.bookingID.booking.specialty.id == ls.id ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                            Bệnh về ${ls.name}
-                                                        </option>
-                                                    </c:forEach>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><span>Mô tả tình trạng bệnh</span></td>
+                                            <td><span>Lý do xin nghỉ</span></td>
                                             <td>
                                                 <input type="text" name="textReason"
-                                                       value="${sessionScope.bookingID.booking.booking_reason}"
-                                                       class="form-control" ${sessionScope.bookingID.booking.status == 'Completed' ? 'readonly' : ''}>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Trạng thái</td>
-                                            <td>
-                                                <select name="status" class="form-control">
-                                                    <option value="Canceled" ${sessionScope.bookingID.booking.status == 'Canceled' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                        Canceled
-                                                    </option>
-                                                    <option value="Pending" ${sessionScope.bookingID.booking.status == 'Pending' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                        Pending
-                                                    </option>
-                                                    <option value="Confirmed" ${sessionScope.bookingID.booking.status == 'Confirmed' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
-                                                        Confirmed
-                                                    </option>
-                                                    <option value="Completed" ${sessionScope.bookingID.booking.status == 'Completed' ? 'selected' : ''}
-                                                            disabled>
-                                                        Completed
-                                                    </option>
-                                                </select>
+                                                       value="${sessionScope.dayOff.reason}"
+                                                       class="form-control">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Ghi chú của nhân viên</td>
                                             <td>
                                                 <input type="text" name="note"
-                                                       value="${sessionScope.bookingID.booking.reason}" required
+                                                       value="${sessionScope.dayOff.note}" required
                                                        class="form-control">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Trạng thái</td>
+                                            <td>
+                                                <select name="status" class="form-control">
+                                                    <option value="Canceled" ${sessionScope.dayOff.status == 'Canceled' ? 'selected' : ''}>
+                                                        Canceled
+                                                    </option>
+                                                    <option value="Pending" ${sessionScope.dayOff.status == 'Pending' ? 'selected' : ''}>
+                                                        Pending
+                                                    </option>
+                                                    <option value="Confirmed" ${sessionScope.dayOff.status == 'Confirmed' ? 'selected' : ''}>
+                                                        Confirmed
+                                                    </option>
+                                                </select>
                                             </td>
                                         </tr>
                                         <tr>
@@ -294,7 +257,7 @@
                                                     <button type="submit" class="btn btn-primary submit-btn">
                                                         Lưu
                                                     </button>
-                                                    <a href="staff_dashboard" class="btn btn-secondary submit-btn">
+                                                    <a href="list_day_off_doctor" class="btn btn-secondary submit-btn">
                                                         Quay lại
                                                     </a>
                                                 </div>

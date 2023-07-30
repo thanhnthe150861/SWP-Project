@@ -3,11 +3,10 @@
 <!DOCTYPE html>
 <html>
 
-<!-- Mirrored from dreamguys.co.in/demo/doccure/admin/appointment-list.jsp by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Nov 2019 04:12:46 GMT -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>TATQ CLINIC - APPOINTMENT</title>
+    <title>TATQ CLINIC - STAFF DASHBOARD</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="view/admin/assets/img/favicon.png">
@@ -33,6 +32,7 @@
     <![endif]-->
 </head>
 <body>
+
 <!-- Main Wrapper -->
 <div class="main-wrapper">
 
@@ -100,7 +100,7 @@
                     <li>
                         <a href="staff_dashboard"><i class="fe fe-home"></i> <span>Bảng điều khiển</span></a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="create_invoice"><i class="fe fe-edit"></i>
                             <span>Tạo hóa đơn</span></a>
                     </li>
@@ -109,7 +109,7 @@
                             <i class="fe fe-calendar"></i>
                             <span>Danh sách xin nghỉ</span></a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
                     </li>
                     <li>
@@ -141,131 +141,157 @@
 
     <!-- Page Wrapper -->
     <div class="page-wrapper">
+
         <div class="content container-fluid">
 
             <!-- Page Header -->
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Tạo hóa đơn cho lịch đã hoàn thành trong ngày</h3>
+                        <span>Hồ sơ</span>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="staff_dashboard">Bảng điều khiển</a>
-                            </li>
-                            <li class="breadcrumb-item active">Tạo hóa đơn</li>
+                            <li class="breadcrumb-item"><a href="admin_dashboard">Bảng điều khiển</a></li>
+                            <li class="breadcrumb-item active">Hồ sơ chi tiết</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <!-- /Page Header -->
-            <div class="row">
-                <div class="col-md-12">
 
-                    <!-- Recent Orders -->
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="datatable table table-hover table-center mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th>Mã lịch đặt</th>
-                                        <th>Tên bác sĩ</th>
-                                        <th>Nhóm bệnh</th>
-                                        <th>Tên bệnh nhân</th>
-                                        <th>Thời gian hẹn</th>
-                                        <th class="text-center">Trạng thái</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach items="${sessionScope.bookingList}" var="bl">
+            <div class="content container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <% String errorMessage = (String) request.getAttribute("messError"); %>
+                                <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
+                                <div class="alert alert-danger" role="alert">
+                                    <%= errorMessage %>
+                                </div>
+                                <% } %>
+                                <% String messSuccess = (String) request.getAttribute("messSuccess"); %>
+                                <% if (messSuccess != null && !messSuccess.isEmpty()) { %>
+                                <div class="alert alert-success" role="alert">
+                                    <%= messSuccess %>
+                                </div>
+                                <% } %>
+                                <form action="medical_record_details" method="post">
+                                    <table class="table table-bordered table-striped">
+                                        <tbody>
                                         <tr>
-                                            <td>${bl.booking.id}</td>
+                                            <td style="width: 180px;"><span>Mã hồ sơ</span></td>
+                                            <td>
+                                                <input type="text" name="mid" value="${sessionScope.medicalRecord.id}"
+                                                       readonly
+                                                       class="form-control">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Bác sĩ</span></td>
                                             <td>
                                                 <h2 class="table-avatar">
                                                     <a href="#" class="avatar avatar-sm mr-2">
                                                         <img class="avatar-img rounded-circle"
-                                                             src="${bl.booking.doctor.url}"
-                                                        >
+                                                             src="${sessionScope.medicalRecord.booking.doctor.url}">
                                                     </a>
-                                                    <a href="#">${bl.booking.doctor.name}
+                                                    <a href="#">${sessionScope.medicalRecord.booking.doctor.name}
                                                     </a>
                                                 </h2>
                                             </td>
-                                            <td>Nhóm bệnh về ${bl.booking.specialty.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Bệnh nhân</span></td>
                                             <td>
                                                 <h2 class="table-avatar">
                                                     <a href="#" class="avatar avatar-sm mr-2">
                                                         <img class="avatar-img rounded-circle"
-                                                             src="${bl.booking.patient.url}"
-                                                        >
+                                                             src="${sessionScope.medicalRecord.booking.patient.url}">
                                                     </a>
-                                                    <a href="#">${bl.booking.patient.name}
+                                                    <a href="#">${sessionScope.medicalRecord.booking.patient.name}
                                                     </a>
                                                 </h2>
                                             </td>
-                                            <td>${bl.booking.date}<span
-                                                    class="d-block text-info">${bl.booking.slots.name}</span>
+                                        </tr>
+                                        <tr>
+                                            <td>Ngày khám</td>
+                                            <td>
+                                                <input type="date" name="date"
+                                                       value="${sessionScope.medicalRecord.booking.date}"
+                                                       class="form-control" readonly>
                                             </td>
-                                            <td class="text-center">
-                                                    <span class="badge badge-pill bg-${bl.booking.status == 'Confirmed' ? 'success-light' : bl.booking.status == 'Pending' ? 'warning-light' : bl.booking.status == 'Canceled' ? 'danger-light' : bl.booking.status == 'Completed' ? 'info-light' : ''}">
-                                                            ${bl.booking.status}
-                                                    </span>
+                                        </tr>
+                                        <tr>
+                                            <td>Ca khám</td>
+                                            <td>
+                                                <span class="form-control">${sessionScope.medicalRecord.booking.slots.name}</span>
                                             </td>
-                                            <td class="text-right">
-                                                <div class="table-action">
-                                                    <c:if test="${bl.booking.status == 'Completed'}">
-                                                        <a href="medical_record_details?mid=${bl.id}"
-                                                           class="btn btn-sm bg-info-light">Xem hồ sơ
-                                                        </a>
-                                                        <c:if test="${bl.bill.id == 0}">
-                                                            <a href="invoice_details?mid=${bl.id}"
-                                                               class="btn btn-sm bg-success-light">
-                                                                <i class="far fa-edit"></i> Tạo hóa đơn
-                                                            </a>
-                                                        </c:if>
-                                                        <c:if test="${bl.bill.id != 0}">
-                                                            <a href="invoice_view?bid=${bl.bill.id}"
-                                                               class="btn btn-sm bg-success-light">
-                                                                <i class="far fa-eye"></i> Xem hóa đơn
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>
+                                        </tr>
+                                        <tr>
+                                            <td>Chuẩn đoán</td>
+                                            <td>
+                                                <input type="text" name="diagnosis"
+                                                       value="${sessionScope.medicalRecord.diagnosis}"
+                                                       class="form-control" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><span>Ảnh đính kèm (nếu có)</span></td>
+                                            <td>
+                                                <input type="file" name="file"
+                                                       class="form-control" readonly>
+                                                <span><img src="${sessionScope.medicalRecord.url}"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Đơn thuốc (nếu có)</td>
+                                            <td>
+                                                <input type="text" name="prescription"
+                                                       value="${sessionScope.medicalRecord.prescription}"
+                                                       class="form-control" readonly>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                                <div class="submit-section">
+                                                    <a href="staff_appointment" class="btn btn-secondary submit-btn">
+                                                        Quay lại
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    <!-- /Recent Orders -->
-
                 </div>
             </div>
         </div>
     </div>
-    <!-- /Page Wrapper -->
+</div>
+<!-- /Page Wrapper -->
 
 </div>
 <!-- /Main Wrapper -->
 
 <!-- jQuery -->
-<script src="assets/js/jquery-3.2.1.min.js"></script>
+<script src="view/admin/assets/js/jquery-3.2.1.min.js"></script>
 
 <!-- Bootstrap Core JS -->
-<script src="assets/js/popper.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
+<script src="view/admin/assets/js/popper.min.js"></script>
+<script src="view/admin/assets/js/bootstrap.min.js"></script>
 
 <!-- Slimscroll JS -->
-<script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="view/admin/assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
-<!-- Datatables JS -->
-<script src="assets/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="assets/plugins/datatables/datatables.min.js"></script>
+<script src="view/admin/assets/plugins/raphael/raphael.min.js"></script>
+<script src="view/admin/assets/plugins/morris/morris.min.js"></script>
+<script src="view/admin/assets/js/chart.morris.js"></script>
 
 <!-- Custom JS -->
-<script src="assets/js/script.js"></script>
+<script src="view/admin/assets/js/script.js"></script>
 
 </body>
 </html>

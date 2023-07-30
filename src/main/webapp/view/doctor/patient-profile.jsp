@@ -212,7 +212,7 @@
                                                             <td></td>
                                                             <td></td>
                                                             <td>
-																		<span class="badge badge-pill bg-${m.booking.status eq 'Confirmed' ? 'success-light' : m.booking.status eq 'Pending' ? 'warning-light' : m.booking.status eq 'Cancelled' ? 'danger-light' : m.booking.status eq 'Completed' ? 'info-light' : ''}">
+																		<span class="badge badge-pill bg-${m.booking.status eq 'Confirmed' ? 'success-light' : m.booking.status eq 'Pending' ? 'warning-light' : m.booking.status eq 'Canceled' ? 'danger-light' : m.booking.status eq 'Completed' ? 'info-light' : ''}">
                                                                                 ${m.booking.status}
                                                                         </span>
                                                             </td>
@@ -224,7 +224,7 @@
                                                                             <i class="fas fa-check"></i> Tạo hồ sơ bệnh
                                                                             án
                                                                         </a>
-                                                                        <a href="patient_profile?id=${sessionScope.patient.id}&bid=${m.booking.id}&status=Cancelled"
+                                                                        <a href="patient_profile?id=${sessionScope.patient.id}&bid=${m.booking.id}&status=Canceled"
                                                                            class="btn btn-sm bg-danger-light">
                                                                             <i class="far fa-trash-alt"></i> Hủy
                                                                         </a>

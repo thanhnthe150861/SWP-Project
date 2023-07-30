@@ -116,6 +116,11 @@
                     <li>
                         <a href="patient_list"><i class="fe fe-user"></i> <span>Bệnh Nhân</span></a>
                     </li>
+                    <li>
+                        <a href="day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
+                    </li>
                     <li class="active">
                         <a href="invoice_list"><i class="fe fe-document"></i> <span> Hóa Đơn</span></a>
                     </li>
@@ -214,8 +219,7 @@
                                                     <i class="fe fe-pencil"></i> Chỉnh sửa
                                                 </a>
                                                 <a class="btn btn-sm bg-info-light" data-toggle="modal"
-                                                   href="invoice_view?bid=<%= invoice.getBill().getId() %>">
-                                                    <i class="fe fe-trash"></i> Xem
+                                                   href="invoice_view?bid=<%= invoice.getBill().getId() %>">Xem chi tiết
                                                 </a>
                                             </div>
                                         </td>
@@ -296,12 +300,6 @@
     <div class="modal fade" id="delete_modal" aria-hidden="true" role="dialog">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <!--	<div class="modal-header">
-                        <h5 class="modal-title">Delete</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>-->
                 <div class="modal-body">
                     <div class="form-content p-2">
                         <h4 class="modal-title">Xóa</h4>

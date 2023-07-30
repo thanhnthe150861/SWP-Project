@@ -316,17 +316,17 @@
                                                             </td>
                                                             <td>
                                                                 <input type="text" name="textReason"
-                                                                       value="${sessionScope.bookingID.booking.booking_reason}" ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'readonly' : ''}>
+                                                                       value="${sessionScope.bookingID.booking.booking_reason}" ${sessionScope.bookingID.booking.status == 'Canceled' ? 'readonly' : ''}>
                                                             </td>
                                                         </tr>
                                                         <tr>
                                                             <td>Trạng thái</td>
                                                             <td>
                                                                 <select name="status">
-                                                                    <option value="Cancelled" ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'disabled' : ''}>
-                                                                        Cancelled
+                                                                    <option value="Canceled" ${sessionScope.bookingID.booking.status == 'Canceled' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Canceled' ? 'disabled' : ''}>
+                                                                        Canceled
                                                                     </option>
-                                                                    <option value="Pending" ${sessionScope.bookingID.booking.status == 'Pending' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Cancelled' ? 'disabled' : ''}>
+                                                                    <option value="Pending" ${sessionScope.bookingID.booking.status == 'Pending' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Canceled' ? 'disabled' : ''}>
                                                                         Pending
                                                                     </option>
                                                                     <option value="Confirmed" ${sessionScope.bookingID.booking.status == 'Confirmed' ? 'selected' : ''}
@@ -351,13 +351,13 @@
                                                             <td></td>
                                                             <td>
                                                                 <div class="submit-section">
-                                                                    <c:if test="${sessionScope.bookingID.booking.status == 'Cancelled'}">
+                                                                    <c:if test="${sessionScope.bookingID.booking.status == 'Canceled'}">
                                                                         <a href="patient_dashboard"
                                                                            class="btn btn-primary submit-btn">Quay
                                                                             lại</a>
 
                                                                     </c:if>
-                                                                    <c:if test="${sessionScope.bookingID.booking.status != 'Cancelled'}">
+                                                                    <c:if test="${sessionScope.bookingID.booking.status != 'Canceled'}">
                                                                         <button type="submit"
                                                                                 class="btn btn-primary submit-btn">
                                                                             Lưu

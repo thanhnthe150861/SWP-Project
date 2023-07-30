@@ -103,6 +103,11 @@
                         <a href="create_invoice"><i class="fe fe-edit"></i> <span>Tạo hóa đơn</span></a>
                     </li>
                     <li>
+                        <a href="list_day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
+                    </li>
+                    <li>
                         <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
                     </li>
                     <li class="active">

@@ -48,7 +48,7 @@ CREATE TABLE dayoff (
 		date date,
         slot_id int,
         reason varchar(500),
-        status bit,
+        status varchar(20),
 		note varchar(500),
 		PRIMARY KEY (id)
 	);
@@ -164,16 +164,11 @@ INSERT INTO patient (username, url, name, gender, dob, rank_id) VALUES ('patient
 INSERT INTO patient (username, url, name, gender, dob, rank_id) VALUES ('patient3', NULL, 'Ngân', 'Female', '1992-02-02', 2);
 -- Add more patients as needed
  -- Doctor table INSERT statements
-INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES ('doctor', NULL, 'Dr. Smith', 'Male', '1980-03-03', 1, 1);
-INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES ('doctor1', NULL, 'Dr. Park', 'Female', '1975-07-07', 2, 2);
-INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES ('doctor2', NULL, 'Dr. Lee', 'Male', '1969-08-08', 3, 3);
+INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES ('doctor', NULL, 'Dr Smith', 'Male', '1980-03-03', 1, 1);
+INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES ('doctor1', NULL, 'Dr Park', 'Female', '1975-07-07', 2, 2);
+INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES ('doctor2', NULL, 'Dr Lee', 'Male', '1969-08-08', 3, 3);
 INSERT INTO doctor (username, url, name, gender, dob, specialty, rank_id) VALUES ('doctor3', NULL, 'Thành', 'Female', '1982-04-04', 1, 2);
 
 INSERT INTO staff (username, url, name, gender, dob) VALUES ('staff1', 'www.example.com/staff1', 'John Doe', 'Male', '1990-01-01'); 
 INSERT INTO staff (username, url, name, gender, dob) VALUES ('staff2', 'www.example.com/staff2', 'Jane Smith', 'Female', '1985-05-10'); 
 INSERT INTO staff (username, url, name, gender, dob) VALUES ('staff3', 'www.example.com/staff3', 'Michael Johnson', 'Male', '1982-11-15'); 
-
-
-
-
-

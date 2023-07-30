@@ -1,13 +1,15 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="mvc.model.MedicalRecord" %>
+<%@ page import="java.util.List" %>
+<%@ page import="mvc.dal.StaffDBContext" %>
+<%@ page import="mvc.model.DayOff" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-
-<!-- Mirrored from dreamguys.co.in/demo/doccure/admin/appointment-list.jsp by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Nov 2019 04:12:46 GMT -->
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <title>TATQ CLINIC - APPOINTMENT</title>
+    <title>TATQ CLINIC - LIST DOCTOR</title>
 
     <!-- Favicon -->
     <link rel="shortcut icon" type="image/x-icon" href="view/admin/assets/img/favicon.png">
@@ -100,11 +102,11 @@
                     <li>
                         <a href="staff_dashboard"><i class="fe fe-home"></i> <span>Bảng điều khiển</span></a>
                     </li>
-                    <li class="active">
+                    <li>
                         <a href="create_invoice"><i class="fe fe-edit"></i>
                             <span>Tạo hóa đơn</span></a>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="list_day_off_doctor">
                             <i class="fe fe-calendar"></i>
                             <span>Danh sách xin nghỉ</span></a>
@@ -142,94 +144,67 @@
     <!-- Page Wrapper -->
     <div class="page-wrapper">
         <div class="content container-fluid">
-
             <!-- Page Header -->
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Tạo hóa đơn cho lịch đã hoàn thành trong ngày</h3>
+                        <h3 class="page-title">Danh sách xin nghỉ</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="staff_dashboard">Bảng điều khiển</a>
-                            </li>
-                            <li class="breadcrumb-item active">Tạo hóa đơn</li>
+                            <li class="breadcrumb-item"><a href="staff_dashboard">Bảng điều khiển</a></li>
+                            <li class="breadcrumb-item active">Danh sách xin nghỉ</li>
                         </ul>
                     </div>
                 </div>
             </div>
             <!-- /Page Header -->
-            <div class="row">
-                <div class="col-md-12">
 
-                    <!-- Recent Orders -->
+            <div class="row">
+                <div class="col-sm-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="datatable table table-hover table-center mb-0">
                                     <thead>
                                     <tr>
-                                        <th>Mã lịch đặt</th>
                                         <th>Tên bác sĩ</th>
-                                        <th>Nhóm bệnh</th>
-                                        <th>Tên bệnh nhân</th>
-                                        <th>Thời gian hẹn</th>
+                                        <th>Ngày</th>
+                                        <th>Ca xin nghỉ</th>
+                                        <th>Lý do xin nghỉ</th>
+                                        <th>Ghi chú của nhân viên</th>
                                         <th class="text-center">Trạng thái</th>
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${sessionScope.bookingList}" var="bl">
+                                    <c:forEach items="${sessionScope.dayOffList}" var="dol">
                                         <tr>
-                                            <td>${bl.booking.id}</td>
                                             <td>
                                                 <h2 class="table-avatar">
                                                     <a href="#" class="avatar avatar-sm mr-2">
                                                         <img class="avatar-img rounded-circle"
-                                                             src="${bl.booking.doctor.url}"
-                                                        >
+                                                             src="${dol.doctor.url}">
                                                     </a>
-                                                    <a href="#">${bl.booking.doctor.name}
-                                                    </a>
-                                                </h2>
-                                            </td>
-                                            <td>Nhóm bệnh về ${bl.booking.specialty.name}</td>
-                                            <td>
-                                                <h2 class="table-avatar">
-                                                    <a href="#" class="avatar avatar-sm mr-2">
-                                                        <img class="avatar-img rounded-circle"
-                                                             src="${bl.booking.patient.url}"
-                                                        >
-                                                    </a>
-                                                    <a href="#">${bl.booking.patient.name}
+                                                    <a href="#">${dol.doctor.name}
                                                     </a>
                                                 </h2>
                                             </td>
-                                            <td>${bl.booking.date}<span
-                                                    class="d-block text-info">${bl.booking.slots.name}</span>
+                                            <td>${dol.date}
+                                            </td>
+                                            <td>${dol.slot.name}
+                                            </td>
+                                            <td>${dol.reason}
+                                            </td>
+                                            <td>${dol.note}
                                             </td>
                                             <td class="text-center">
-                                                    <span class="badge badge-pill bg-${bl.booking.status == 'Confirmed' ? 'success-light' : bl.booking.status == 'Pending' ? 'warning-light' : bl.booking.status == 'Canceled' ? 'danger-light' : bl.booking.status == 'Completed' ? 'info-light' : ''}">
-                                                            ${bl.booking.status}
-                                                    </span>
+                                                <span class="badge badge-pill ${dol.status == "Confirmed" ? 'bg-success inv-badge' : dol.status == 'Pending' ? 'bg-warning inv-badge' : dol.status == "Canceled" ? 'bg-danger inv-badge' : ''}">${dol.status == 'Confirmed' ? 'Đã được chấp nhận' : dol.status == 'Canceled' ? 'Hủy' : dol.status == 'Pending' ? 'Đang chờ' : ''}</span>
                                             </td>
                                             <td class="text-right">
                                                 <div class="table-action">
-                                                    <c:if test="${bl.booking.status == 'Completed'}">
-                                                        <a href="medical_record_details?mid=${bl.id}"
-                                                           class="btn btn-sm bg-info-light">Xem hồ sơ
-                                                        </a>
-                                                        <c:if test="${bl.bill.id == 0}">
-                                                            <a href="invoice_details?mid=${bl.id}"
-                                                               class="btn btn-sm bg-success-light">
-                                                                <i class="far fa-edit"></i> Tạo hóa đơn
-                                                            </a>
-                                                        </c:if>
-                                                        <c:if test="${bl.bill.id != 0}">
-                                                            <a href="invoice_view?bid=${bl.bill.id}"
-                                                               class="btn btn-sm bg-success-light">
-                                                                <i class="far fa-eye"></i> Xem hóa đơn
-                                                            </a>
-                                                        </c:if>
-                                                    </c:if>
+                                                    <a href="day_off_details?did=${dol.id}"
+                                                       class="btn btn-sm bg-info-light">
+                                                        <i class="far fa-eye"></i> Xem chi tiết
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -239,14 +214,11 @@
                             </div>
                         </div>
                     </div>
-                    <!-- /Recent Orders -->
-
                 </div>
             </div>
         </div>
     </div>
     <!-- /Page Wrapper -->
-
 </div>
 <!-- /Main Wrapper -->
 

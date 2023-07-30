@@ -31,7 +31,7 @@ public class DoctorDBContext extends DBContext {
                 dayOff.setSlot_id(rs.getInt("slot_id"));
                 dayOff.setReason(rs.getString("reason"));
                 dayOff.setNote(rs.getString("note"));
-                dayOff.setStatus(rs.getBoolean("status"));
+                dayOff.setStatus(rs.getString("status"));
                 Slot slot = new Slot();
                 slot.setId(rs.getInt("slot_id"));
                 slot.setName(rs.getString("slot_name"));
@@ -52,7 +52,7 @@ public class DoctorDBContext extends DBContext {
             stm.setDate(1, dayOff.getDate());
             stm.setInt(2, dayOff.getSlot_id());
             stm.setString(3, dayOff.getReason());
-            stm.setBoolean(4, dayOff.isStatus());
+            stm.setString(4, dayOff.getStatus());
             stm.setInt(5, dayOff.getDoctor().getId());
             stm.executeUpdate();
         } catch (SQLException e) {
@@ -385,6 +385,7 @@ public class DoctorDBContext extends DBContext {
                     "    d.name AS doctor_name,\n" +
                     "    d.url AS doctor_url, \n" +
                     "    d.specialty AS doctor_specialty,\n" +
+                    "    s.name AS specialty_name,\n" +
                     "    rd.name AS rank_doctor,\n" +
                     "    p.id AS patient_id,\n" +
                     "    p.name AS patient_name, \n" +
@@ -409,7 +410,10 @@ public class DoctorDBContext extends DBContext {
                     "    medical_record AS mr ON b.id = mr.booking_id \n" +
                     "LEFT JOIN \n" +
                     "    bill ON mr.id = bill.medical_record_id\n" +
-                    "    Where bill.id = ? ;";
+                    "LEFT JOIN\n" +
+                    "    specialty AS s ON d.specialty = s.id\n" +
+                    "WHERE \n" +
+                    "    bill.id = ?;";
             stm = connection.prepareStatement(sql);
             stm.setInt(1, Integer.parseInt(bid));
             rs = stm.executeQuery();
@@ -422,6 +426,8 @@ public class DoctorDBContext extends DBContext {
                 doctor.setUrl(rs.getString("doctor_url"));
                 doctor.setSpecialty(rs.getInt("doctor_specialty"));
                 doctor.setRanks(rank);
+                Specialty specialty = new Specialty();
+                specialty.setName(rs.getString("specialty_name"));
                 Patient patient = new Patient();
                 patient.setId(rs.getInt("patient_id"));
                 patient.setName(rs.getString("patient_name"));
@@ -432,6 +438,7 @@ public class DoctorDBContext extends DBContext {
                 booking.setDate(rs.getDate("booking_date"));
                 booking.setDoctor(doctor);
                 booking.setPatient(patient);
+                booking.setSpecialty(specialty);
                 Bill bill = new Bill();
                 bill.setId(rs.getInt("bill_id"));
                 bill.setPricePrescription(rs.getInt("prescription_price"));
@@ -456,24 +463,26 @@ public class DoctorDBContext extends DBContext {
                     "    d.name AS doctor_name,\n" +
                     "    d.url AS doctor_url,\n" +
                     "    d.specialty AS doctor_specialty,\n" +
+                    "    s.name AS specialty_name,\n" +
                     "    rd.name AS rank_doctor,\n" +
                     "    p.id AS patient_id,\n" +
-                    "    p.name AS patient_name, \n" +
-                    "    p.url AS patient_url, \n" +
-                    "    p.dob AS patient_date, \n" +
-                    "    b.id AS booking_id, \n" +
-                    "    b.date AS booking_date, \n" +
-                    "    bill.id AS bill_id, \n" +
-                    "    bill.priceMedical AS medical_price, \n" +
-                    "    bill.pricePrescription AS prescription_price, \n" +
-                    "    bill.totalPrice AS total_price, \n" +
+                    "    p.name AS patient_name,\n" +
+                    "    p.url AS patient_url,\n" +
+                    "    p.dob AS patient_date,\n" +
+                    "    b.id AS booking_id,\n" +
+                    "    b.date AS booking_date,\n" +
+                    "    sl.name AS slot_name,\n" +
+                    "    bill.id AS bill_id,\n" +
+                    "    bill.priceMedical AS medical_price,\n" +
+                    "    bill.pricePrescription AS prescription_price,\n" +
+                    "    bill.totalPrice AS total_price,\n" +
                     "    bill.payment_status AS payment_status,\n" +
                     "    mr.id AS medical_record_id,\n" +
                     "    mr.diagnosis AS medical_record_diagnosis,\n" +
                     "    mr.url AS medical_record_url,\n" +
                     "    mr.prescription AS medical_record_prescription\n" +
                     "FROM \n" +
-                    "    doctor AS d \n" +
+                    "    doctor AS d\n" +
                     "LEFT JOIN \n" +
                     "    rank_doctor AS rd ON rd.id = d.rank_id\n" +
                     "LEFT JOIN \n" +
@@ -484,11 +493,18 @@ public class DoctorDBContext extends DBContext {
                     "    medical_record AS mr ON b.id = mr.booking_id\n" +
                     "LEFT JOIN \n" +
                     "    bill ON mr.id = bill.medical_record_id\n" +
-                    "    Where mr.id = ? ;";
+                    "LEFT JOIN\n" +
+                    "    specialty AS s ON d.specialty = s.id\n" +
+                    "LEFT JOIN\n" +
+                    "    slot AS sl ON b.slot_id = sl.id\n" +
+                    "WHERE \n" +
+                    "    mr.id = ?;\n";
             stm = connection.prepareStatement(sql);
             stm.setInt(1, Integer.parseInt(bid));
             rs = stm.executeQuery();
             if (rs.next()) {
+                Slot slot = new Slot();
+                slot.setName(rs.getString("slot_name"));
                 Rank rank = new Rank();
                 rank.setName(rs.getString("rank_doctor"));
                 Doctor doctor = new Doctor();
@@ -497,6 +513,8 @@ public class DoctorDBContext extends DBContext {
                 doctor.setUrl(rs.getString("doctor_url"));
                 doctor.setSpecialty(rs.getInt("doctor_specialty"));
                 doctor.setRanks(rank);
+                Specialty specialty = new Specialty();
+                specialty.setName(rs.getString("specialty_name"));
                 Patient patient = new Patient();
                 patient.setId(rs.getInt("patient_id"));
                 patient.setName(rs.getString("patient_name"));
@@ -507,6 +525,8 @@ public class DoctorDBContext extends DBContext {
                 booking.setDate(rs.getDate("booking_date"));
                 booking.setDoctor(doctor);
                 booking.setPatient(patient);
+                booking.setSpecialty(specialty);
+                booking.setSlots(slot);
                 Bill bill = new Bill();
                 bill.setId(rs.getInt("bill_id"));
                 bill.setPricePrescription(rs.getInt("prescription_price"));

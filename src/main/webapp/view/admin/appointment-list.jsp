@@ -121,6 +121,11 @@
                         <a href="patient_list"><i class="fe fe-user"></i> <span>Bệnh Nhân</span></a>
                     </li>
                     <li>
+                        <a href="day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
+                    </li>
+                    <li>
                         <a href="invoice_list"><i class="fe fe-document"></i> <span>Hóa Đơn</span></a>
                     </li>
                     <li>
@@ -180,6 +185,7 @@
                                         <th>Thời Gian Đặt Cuộc Hẹn</th>
                                         <th class="text-center">Trạng Thái</th>
                                         <th>Thanh Toán</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -215,7 +221,7 @@
                                             <span class="badge badge-pill bg-success-light"><%= appointment.getBooking().getStatus() %></span>
                                             <% } else if (appointment.getBooking().getStatus().equals("Pending")) { %>
                                             <span class="badge badge-pill bg-warning-light"><%= appointment.getBooking().getStatus() %></span>
-                                            <% } else if (appointment.getBooking().getStatus().equals("Cancelled")) { %>
+                                            <% } else if (appointment.getBooking().getStatus().equals("Canceled")) { %>
                                             <span class="badge badge-pill bg-danger-light"><%= appointment.getBooking().getStatus() %></span>
                                             <% } else if (appointment.getBooking().getStatus().equals("Completed")) { %>
                                             <span class="badge badge-pill bg-info-light"><%= appointment.getBooking().getStatus() %></span>
@@ -223,6 +229,18 @@
                                         </td>
                                         <td class="text-left">
                                             <%= appointment.getBill().getTotalPrice() %> VND
+                                        </td>
+                                        <td class="text-right">
+                                            <div class="table-action">
+                                                <% if (appointment.getBooking().getStatus().equals("Completed")) {%>
+                                                <a href="medical_record_details?mid=<%= appointment.getBooking().getId() %>"
+                                                   class="btn btn-sm bg-info-light">Xem hồ sơ
+                                                </a>
+                                                <%}%>
+                                                <a href="appointment_details?bid=<%= appointment.getId() %>"
+                                                   class="btn btn-sm bg-info-light">Xem chi tiết
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                     <% } %>

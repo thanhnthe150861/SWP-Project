@@ -9,14 +9,14 @@ public class DayOff {
     private Date date;
     private String reason;
     private String note;
-    private boolean status;
+    private String status;
     private Slot slot = new Slot();
     private Doctor doctor = new Doctor();
 
     public DayOff() {
     }
 
-    public DayOff(int id, int slot_id, int doctor_id, Date date, String reason, String note, boolean status, Slot slot, Doctor doctor) {
+    public DayOff(int id, int slot_id, int doctor_id, Date date, String reason, String note, String status, Slot slot, Doctor doctor) {
         this.id = id;
         this.slot_id = slot_id;
         this.doctor_id = doctor_id;
@@ -68,11 +68,11 @@ public class DayOff {
         this.date = date;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

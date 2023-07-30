@@ -106,6 +106,11 @@
                             <span>Tạo hóa đơn</span></a>
                     </li>
                     <li>
+                        <a href="list_day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
+                    </li>
+                    <li>
                         <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
                     </li>
                     <li>
@@ -213,7 +218,7 @@
                                                 </a>
                                                 <a href="invoice_view?bid=<%= invoice.getBill().getId() %>"
                                                    class="btn btn-sm bg-info-light">
-                                                    <i class="far fa-eye"></i> Xem
+                                                    <i class="far fa-eye"></i> Xem chi tiết
                                                 </a>
                                                 <%}%>
                                             </div>

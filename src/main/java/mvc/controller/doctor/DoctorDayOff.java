@@ -57,7 +57,7 @@ public class DoctorDayOff extends HttpServlet {
         dayOff.setDate(Date.valueOf(selectedDate));
         dayOff.setSlot_id(Integer.parseInt(selectedSlot));
         dayOff.setReason(reasonDayOff);
-        dayOff.setStatus(false);
+        dayOff.setStatus("Pending");
         dayOff.setDoctor(doctor);
         doctorDBContext.CreateDayOff(dayOff);
         req.setAttribute("messSuccess", "Gửi yêu cầu thành công");

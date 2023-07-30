@@ -108,6 +108,11 @@
                             <span>Tạo hóa đơn</span></a>
                     </li>
                     <li>
+                        <a href="list_day_off_doctor">
+                            <i class="fe fe-calendar"></i>
+                            <span>Danh sách xin nghỉ</span></a>
+                    </li>
+                    <li>
                         <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
                     </li>
                     <li>
@@ -192,6 +197,9 @@
                                             <tr>
                                                 <td>${bl.id}</td>
                                                 <td>
+                                                    <c:if test="${bl.doctor.id == 0}">
+                                                        Chưa xếp bác sĩ
+                                                    </c:if>
                                                     <c:if test="${bl.doctor.id != 0}">
                                                         <h2 class="table-avatar">
                                                             <a class="avatar avatar-sm mr-2">
@@ -221,7 +229,7 @@
                                                 <td>${bl.booking_reason}
                                                 </td>
                                                 <td class="text-center">
-                                                    <span class="badge badge-pill bg-${bl.status == 'Confirmed' ? 'success-light' : bl.status == 'Pending' ? 'warning-light' : bl.status == 'Cancelled' ? 'danger-light' : bl.status == 'Completed' ? 'info-light' : ''}">
+                                                    <span class="badge badge-pill bg-${bl.status == 'Confirmed' ? 'success-light' : bl.status == 'Pending' ? 'warning-light' : bl.status == 'Canceled' ? 'danger-light' : bl.status == 'Completed' ? 'info-light' : ''}">
                                                             ${bl.status}
                                                     </span>
                                                 </td>

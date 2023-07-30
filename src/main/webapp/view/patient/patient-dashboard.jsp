@@ -251,7 +251,7 @@
                                                                                  src="${m.booking.doctor.url}">
                                                                         </a>
                                                                         <a href="doctor_profile?id=${m.booking.doctor.id}">${m.booking.doctor.name}
-                                                                            <span>${m.booking.doctor.specialty}</span></a>
+                                                                            <span>Bác sĩ chuyên khoa ${m.booking.specialty.name}</span></a>
                                                                     </h2>
                                                                 </c:if>
                                                             </td>
@@ -261,7 +261,7 @@
                                                             <td>${m.booking.specialty.name}</td>
                                                             <td>${m.booking.booking_reason}</td>
                                                             <td>
-                                                                <span class="badge badge-pill bg-${m.booking.status == 'Confirmed' ? 'success-light' : m.booking.status == 'Pending' ? 'warning-light' : m.booking.status == 'Cancelled' ? 'danger-light' : m.booking.status == 'Completed' ? 'info-light' : ''}">
+                                                                <span class="badge badge-pill bg-${m.booking.status == 'Confirmed' ? 'success-light' : m.booking.status == 'Pending' ? 'warning-light' : m.booking.status == 'Canceled' ? 'danger-light' : m.booking.status == 'Completed' ? 'info-light' : ''}">
                                                                         ${m.booking.status}
                                                                 </span>
                                                             </td>

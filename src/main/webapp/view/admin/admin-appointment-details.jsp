@@ -98,23 +98,23 @@
 
             <!-- User Menu -->
             <li class="nav-item dropdown has-arrow">
-                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                <a class="dropdown-toggle nav-link" data-toggle="dropdown">
                     <span class="user-img"><img class="rounded-circle"
-                                                src="${sessionScope.staff.url}" width="31"
+                                                src="view/admin/assets/img/profiles/avatar-01.jpg" width="31"
                     ></span>
                 </a>
                 <div class="dropdown-menu">
                     <div class="user-header">
                         <div class="avatar avatar-sm">
-                            <img src="${sessionScope.staff.url}"
+                            <img src="view/admin/assets/img/profiles/avatar-01.jpg"
                                  class="avatar-img rounded-circle">
                         </div>
                         <div class="user-text">
-                            <h6>${sessionScope.staff.name}</h6>
+                            <h6>Administrator</h6>
                         </div>
                     </div>
-                    <a class="dropdown-item" href="staff_dashboard">Bảng điều khiển</a>
-                    <a class="dropdown-item" href="login">Đăng xuất</a>
+                    <a class="dropdown-item" href="admin_dashboard">Hồ Sơ</a>
+                    <a class="dropdown-item" href="login">Đăng Xuất</a>
                 </div>
             </li>
             <!-- /User Menu -->
@@ -130,40 +130,47 @@
         <div class="sidebar-inner slimscroll">
             <div id="sidebar-menu" class="sidebar-menu">
                 <ul>
-                    <li>
-                        <a href="staff_dashboard"><i class="fe fe-home"></i> <span>Bảng điều khiển</span></a>
+                    <li class="menu-title">
+                        <span>Main</span>
                     </li>
                     <li>
-                        <a href="create_invoice"><i class="fe fe-edit"></i>
-                            <span>Tạo hóa đơn</span></a>
+                        <a href="admin_dashboard"><i class="fe fe-home"></i> <span>Bảng Điều Khiển</span></a>
+                    </li>
+                    <li class="active">
+                        <a href="appointment_list"><i class="fe fe-layout"></i> <span>Cuộc Hẹn</span></a>
                     </li>
                     <li>
-                        <a href="list_day_off_doctor">
+                        <a href="staff_list"><i class="fe fe-users"></i> <span>Nhân Viên</span></a>
+                    </li>
+                    <li>
+                        <a href="doctor_list"><i class="fe fe-user-plus"></i> <span>Bác Sĩ</span></a>
+                    </li>
+                    <li>
+                        <a href="patient_list"><i class="fe fe-user"></i> <span>Bệnh Nhân</span></a>
+                    </li>
+                    <li>
+                        <a href="day_off_doctor">
                             <i class="fe fe-calendar"></i>
                             <span>Danh sách xin nghỉ</span></a>
                     </li>
-                    <li class="active">
-                        <a href="staff_appointment"><i class="fe fe-layout"></i> <span>Lịch hẹn</span></a>
+                    <li>
+                        <a href="invoice_list"><i class="fe fe-document"></i> <span>Hóa Đơn</span></a>
                     </li>
                     <li>
-                        <a href="list_doctor"><i class="fe fe-user"></i> <span>Danh sách bác sĩ</span></a>
+                        <a href="profile"><i class="fe fe-user-plus"></i> <span>Hồ Sơ</span></a>
                     </li>
-                    <li>
-                        <a href="list_patient"><i class="fe fe-user"></i> <span>Danh sách bệnh nhân</span></a>
-                    </li>
-                    <li>
-                        <a href="list_invoice"><i class="fe fe-document"></i> <span>Hóa đơn</span></a>
-                    </li>
-                    <li>
-                        <a href="staff_profile"><i class="fe fe-edit"></i><span>Thông tin cá nhân</span></a>
-                    </li>
-                    <li>
-                        <a href="staff_change_password"><i class="fe fe-edit"></i> <span>Đổi mật khẩu</span></a>
+                    <li class="submenu">
+                        <a href="#"><i class="fe fe-document"></i> <span>Thêm Mới/Cập Nhật</span> <span
+                                class="menu-arrow"></span></a>
+                        <ul style="display: none;" class="active">
+                            <li><a href="form_details?str=doctor">Bác Sĩ</a></li>
+                            <li><a href="form_details?str=patient">Bệnh Nhân</a></li>
+                            <li><a href="form_details?str=staff">Nhân Viên</a></li>
+                        </ul>
                     </li>
                     <li>
                         <a href="login">
-                            <i class="fe fe-eject"></i>
-                            <span>Đăng xuất</span>
+                            <span>Đăng Xuất</span>
                         </a>
                     </li>
                 </ul>
@@ -181,11 +188,10 @@
             <div class="page-header">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h3 class="page-title">Xin chào ${sessionScope.staff.name}</h3>
-                        <span>Nhân viên</span>
+                        <h3 class="page-title">Cuộc Hẹn</h3>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="staff_dashboard">Bảng điều khiển</a></li>
-                            <li class="breadcrumb-item active">Danh sách lịch đặt chưa xử lý</li>
+                            <li class="breadcrumb-item"><a href="admin_dashboard">Bảng Điều Khiển</a></li>
+                            <li class="breadcrumb-item active">Cuộc Hẹn</li>
                         </ul>
                     </div>
                 </div>
@@ -225,7 +231,7 @@
                                                 <select name="did">
                                                     <option value="0">Chưa có bác sĩ khám</option>
                                                     <c:forEach items="${sessionScope.doctors}" var="d">
-                                                        <option value="${d.id}" ${sessionScope.bookingID.booking.doctor.id == d.id ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
+                                                        <option value="${d.id}" ${sessionScope.bookingID.booking.doctor.id == d.id ? 'selected' : ''} >
                                                                 ${d.name}
                                                         </option>
                                                     </c:forEach>
@@ -244,7 +250,7 @@
                                             <td>
                                                 <select name="diseaseGroup" class="form-control">
                                                     <c:forEach items="${sessionScope.listSp}" var="ls">
-                                                        <option value="${ls.id}" ${sessionScope.bookingID.booking.specialty.id == ls.id ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
+                                                        <option value="${ls.id}" ${sessionScope.bookingID.booking.specialty.id == ls.id ? 'selected' : ''} >
                                                             Bệnh về ${ls.name}
                                                         </option>
                                                     </c:forEach>
@@ -256,24 +262,23 @@
                                             <td>
                                                 <input type="text" name="textReason"
                                                        value="${sessionScope.bookingID.booking.booking_reason}"
-                                                       class="form-control" ${sessionScope.bookingID.booking.status == 'Completed' ? 'readonly' : ''}>
+                                                       class="form-control">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>Trạng thái</td>
                                             <td>
                                                 <select name="status" class="form-control">
-                                                    <option value="Canceled" ${sessionScope.bookingID.booking.status == 'Canceled' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
+                                                    <option value="Canceled" ${sessionScope.bookingID.booking.status == 'Canceled' ? 'selected' : ''} >
                                                         Canceled
                                                     </option>
-                                                    <option value="Pending" ${sessionScope.bookingID.booking.status == 'Pending' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
+                                                    <option value="Pending" ${sessionScope.bookingID.booking.status == 'Pending' ? 'selected' : ''} >
                                                         Pending
                                                     </option>
-                                                    <option value="Confirmed" ${sessionScope.bookingID.booking.status == 'Confirmed' ? 'selected' : ''} ${sessionScope.bookingID.booking.status == 'Completed' ? 'disabled' : ''}>
+                                                    <option value="Confirmed" ${sessionScope.bookingID.booking.status == 'Confirmed' ? 'selected' : ''} >
                                                         Confirmed
                                                     </option>
-                                                    <option value="Completed" ${sessionScope.bookingID.booking.status == 'Completed' ? 'selected' : ''}
-                                                            disabled>
+                                                    <option value="Completed" ${sessionScope.bookingID.booking.status == 'Completed' ? 'selected' : ''}>
                                                         Completed
                                                     </option>
                                                 </select>
@@ -294,7 +299,7 @@
                                                     <button type="submit" class="btn btn-primary submit-btn">
                                                         Lưu
                                                     </button>
-                                                    <a href="staff_dashboard" class="btn btn-secondary submit-btn">
+                                                    <a href="appointment_list" class="btn btn-secondary submit-btn">
                                                         Quay lại
                                                     </a>
                                                 </div>
