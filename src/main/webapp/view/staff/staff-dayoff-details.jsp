@@ -203,7 +203,7 @@
                                             <td>Ngày nghỉ</td>
                                             <td>
                                                 <input type="date" name="date" value="${sessionScope.dayOff.date}"
-                                                       class="form-control">
+                                                       class="form-control" readonly>
                                             </td>
                                         </tr>
                                         <tr>
@@ -223,7 +223,7 @@
                                             <td>
                                                 <input type="text" name="textReason"
                                                        value="${sessionScope.dayOff.reason}"
-                                                       class="form-control">
+                                                       class="form-control" readonly>
                                             </td>
                                         </tr>
                                         <tr>

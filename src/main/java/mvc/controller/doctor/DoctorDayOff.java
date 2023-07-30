@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import mvc.dal.DoctorDBContext;
 import mvc.dal.PatientDBContext;
+import mvc.dal.StaffDBContext;
 import mvc.model.Account;
 import mvc.model.Booking;
 import mvc.model.DayOff;
@@ -47,12 +48,20 @@ public class DoctorDayOff extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         DoctorDBContext doctorDBContext = new DoctorDBContext();
+        StaffDBContext staffDBContext = new StaffDBContext();
         Doctor doctor = (Doctor) session.getAttribute("doctor");
-        session.removeAttribute("date");
         //Ngày chọn
         String selectedDate = req.getParameter("datePicker");
         String reasonDayOff = req.getParameter("reasonDayOff");
         String selectedSlot = session.getAttribute("selectedSlot").toString();
+        //Check DayOff exist
+        DayOff dayOffs = staffDBContext.checkDayOff(doctor.getId(), selectedDate);
+        if (dayOffs != null) {
+            req.setAttribute("messError", "Bạn đã có đơn xin nghỉ vào ngày này");
+            req.getRequestDispatcher("view/doctor/doctor-dayoff.jsp").forward(req, resp);
+            return;
+        }
+        session.removeAttribute("date");
         DayOff dayOff = new DayOff();
         dayOff.setDate(Date.valueOf(selectedDate));
         dayOff.setSlot_id(Integer.parseInt(selectedSlot));

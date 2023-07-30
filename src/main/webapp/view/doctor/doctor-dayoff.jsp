@@ -296,6 +296,7 @@
                                                                         <th>Lý do xin nghỉ</th>
                                                                         <th>Ghi chú của nhân viên</th>
                                                                         <th>Trạng thái</th>
+                                                                        <th></th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -310,6 +311,9 @@
                                                                                     class="badge badge-pill bg-${dol.status == 'Pending' ?  'warning-light' : dol.status == "Confirmed" ? 'success-light' : dol.status == "Canceled" ? 'danger-light' : ''}">
                                                                                     ${dol.status == 'Canceled' ? 'Hủy' : dol.status == 'Confirmed' ? 'Đã được chấp thuận' : dol.status == 'Pending' ? 'Đang chờ' : ''}
                                                                             </span></td>
+                                                                            <td>
+                                                                                
+                                                                            </td>
                                                                         </tr>
                                                                     </c:forEach>
                                                                     </tbody>

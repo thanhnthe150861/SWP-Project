@@ -193,12 +193,14 @@
                                                     <c:forEach items="${sessionScope.slotList}" var="sl">
                                                     <c:if test="${sl.id < 4 && sl.id > 0}">
                                                         <c:set var="isSlotExist" value="false"/>
+                                                    <c:if test="${sessionScope.dayOff.slot_id == 0 || sessionScope.dayOff.slot_id == sl.id}">
+                                                        <c:set var="isSlotExist" value="true"/>
+                                                    </c:if>
                                                     <c:forEach items="${sessionScope.slotExist}" var="se">
                                                     <c:if test="${se.id eq sl.id}">
                                                         <c:set var="isSlotExist" value="true"/>
                                                     </c:if>
                                                     </c:forEach>
-
                                                     <c:choose>
                                                     <c:when test="${sessionScope.selectedSlot eq sl.id}">
                                                     <a class="timing selected"
@@ -226,6 +228,9 @@
                                                     <c:forEach items="${sessionScope.slotList}" var="sl">
                                                         <c:if test="${sl.id > 3}">
                                                             <c:set var="isSlotExist" value="false"/>
+                                                            <c:if test="${sessionScope.dayOff.slot_id == 0 || sessionScope.dayOff.slot_id == sl.id}">
+                                                                <c:set var="isSlotExist" value="true"/>
+                                                            </c:if>
                                                             <c:forEach items="${sessionScope.slotExist}" var="se">
                                                                 <c:if test="${se.id eq sl.id}">
                                                                     <c:set var="isSlotExist" value="true"/>
